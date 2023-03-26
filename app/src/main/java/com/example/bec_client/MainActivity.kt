@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
             val executor = Executors.newSingleThreadExecutor()
             executor.execute {
                 try {
-                    val res = URL("http://159.223.248.173:8000").readText()
+                    val res = URL("https://teambec.live").readText()
                     Log.d("DEBUG: ", res)
                     runOnUiThread {
                         Toast.makeText(this, res, Toast.LENGTH_LONG).show()
