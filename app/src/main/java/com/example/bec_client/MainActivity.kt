@@ -2,31 +2,33 @@ package com.example.bec_client
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
-import android.widget.Toast
-import java.net.URL
-import java.util.concurrent.Executors
+import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val btn_api_call = findViewById(R.id.btnApiCall) as Button
-        btn_api_call.setOnClickListener {
-            val executor = Executors.newSingleThreadExecutor()
-            executor.execute {
-                try {
-                    val res = URL("https://teambec.live").readText()
-                    Log.d("DEBUG: ", res)
-                    runOnUiThread {
-                        Toast.makeText(this, res, Toast.LENGTH_LONG).show()
-                    }
-                } catch (e: java.lang.Exception) {
-                    Log.d("DEBUG: ", e.toString())
-                }
+        val homeFragment = HomeFragment(); val profileFragment = ProfileFragment(); val searchFragment = SearchFragment(); val trendingFragment = TrendingFragment(); val nearbyFragment = NearbyFragment()
+        setCurrentFragment(homeFragment)
+        val bottomBar = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomBar.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.home -> setCurrentFragment(homeFragment)
+                R.id.trending -> setCurrentFragment(trendingFragment)
+                R.id.search -> setCurrentFragment(searchFragment)
+                R.id.profile -> setCurrentFragment(profileFragment)
+                R.id.nearby -> setCurrentFragment(nearbyFragment)
             }
+            true
+        }
+    }
+
+    private fun setCurrentFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.frame, fragment)
+            commit()
         }
     }
 }
