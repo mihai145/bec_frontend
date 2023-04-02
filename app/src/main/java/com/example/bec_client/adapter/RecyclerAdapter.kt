@@ -39,8 +39,9 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
     }
 
     fun addEntry(card:CardModel){
-        items?.add(0,card)
-        notifyItemInserted(0)
+        var pos = items.size
+        items?.add(card)
+        notifyItemInserted(pos)
     }
     fun submitList(List: List<CardModel>){
         List.forEach { x -> addEntry(x) }
