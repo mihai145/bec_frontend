@@ -55,7 +55,7 @@ class MovieRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 
         fun bind(movie: MovieModel){
             Log.d("Binding",movie.toString())
-            TODO("this bad boy broken no idea why")
+//            TODO("this bad boy broken no idea why")
 //            val requestOptions = RequestOptions()
 //                .placeholder(R.drawable.ic_launcher_background)
 //                .error(R.drawable.ic_launcher_background)
