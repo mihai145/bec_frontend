@@ -6,12 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.SearchView
-import android.widget.TextView
-import java.net.URL
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.example.restapi.home.viewmodel.SearchViewModel
 
 /**
  * A simple [Fragment] subclass.
@@ -19,6 +17,22 @@ import java.util.concurrent.TimeUnit
  * create an instance of this fragment.
  */
 class SearchFragment : Fragment() {
+    private lateinit var searchViewModel:SearchViewModel
+    private fun search(query: String) {
+        searchViewModel.searchMoviesByName(query)
+        searchViewModel.searchedMoviesLiveData?.observe(this, Observer {
+            if (it!=null){
+                it.results.forEach{x -> Log.d("Debug",x.toString())}
+
+            }else{
+                Log.d("DEBUG: ", "a crapat")
+            }
+        })
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,6 +45,7 @@ class SearchFragment : Fragment() {
                 if(query == null)
                     return false;
                 Log.d("DEBUG: ", query)
+                search(query);
                 return true
             }
 
