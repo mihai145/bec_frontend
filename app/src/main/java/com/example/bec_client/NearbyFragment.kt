@@ -80,7 +80,6 @@ class NearbyFragment : Fragment() {
                         properties.load(inputStream)
 
                         val apiKey = properties.getProperty("GOOGLE_MAPS_API_KEY")
-                        Log.d(TAG, "APIKEY: $apiKey")
                         val str = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=cinema&location=${it.latitude},${it.longitude}&radius=5000&key=${apiKey}"
                         val connection = URL(str).openConnection() as HttpURLConnection
                         connection.requestMethod = "GET"
@@ -99,7 +98,6 @@ class NearbyFragment : Fragment() {
                             // parse response into list of movie theaters
                             val gson = Gson()
                             theaters = gson.fromJson(wholeResponse, TheatersResponse::class.java)
-//                            Log.d(TAG, "Theaters: $theaters")
                         } else {
                             Log.d(TAG, "Error: $responseCode")
                         }
@@ -126,7 +124,6 @@ class NearbyFragment : Fragment() {
                         Log.d(TAG, "Theaters: $theaters")
                         theaters.results.forEach{theater ->
                             val theaterLatLng = LatLng(theater.geometry.location.lat, theater.geometry.location.lng)
-//                            Log.d(TAG, "Theater: $theater")
                             val marker = it.addMarker(MarkerOptions().position(theaterLatLng).title(theater.name).snippet(theater.vicinity))
                             marker?.tag = theater
                         }
