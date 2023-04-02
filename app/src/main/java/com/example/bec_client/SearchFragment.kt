@@ -11,7 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bec_client.adapter.MovieRecyclerAdapter
+import com.example.bec_client.adapter.RecyclerAdapter
+import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.viewmodel.SearchViewModel
 
 
@@ -22,13 +23,24 @@ import com.example.restapi.home.viewmodel.SearchViewModel
  */
 class SearchFragment : Fragment() {
     private lateinit var searchViewModel:SearchViewModel
-    private lateinit var movieAdapter: MovieRecyclerAdapter
+    private lateinit var recyclerAdapter: RecyclerAdapter
 
     private fun search(query: String) {
+        recyclerAdapter.resetAdapter()
         searchViewModel.searchMoviesByName(query)
+        searchViewModel.searchActorByName(query)
+
         searchViewModel.searchedMoviesLiveData?.observe(this, Observer {
             if (it!=null){
-                movieAdapter.submitList(it.results)
+                recyclerAdapter.submitList(it.results.map { x -> CardModel(x) })
+                Log.d("Debug",it.toString())
+            }else{
+                Log.d("DEBUG: ", "a crapat")
+            }
+        })
+        searchViewModel.searchedActorsLiveData?.observe(this, Observer {
+            if (it!=null){
+                recyclerAdapter.submitList(it.results.map { x -> CardModel(x) })
                 Log.d("Debug",it.toString())
             }else{
                 Log.d("DEBUG: ", "a crapat")
@@ -48,8 +60,8 @@ class SearchFragment : Fragment() {
         val recyclerView : RecyclerView = mView.findViewById(R.id.recycler_view)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL ,false)
-            movieAdapter = MovieRecyclerAdapter()
-            adapter = movieAdapter
+            recyclerAdapter = RecyclerAdapter()
+            adapter = recyclerAdapter
         }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

@@ -2,8 +2,10 @@ package com.example.restapi.home.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.restapi.home.data.model.request.SearchByActorNameModel
 import com.example.restapi.home.data.model.response.MovieSearchModel
 import com.example.restapi.home.data.model.request.SearchByMovieNameModel
+import com.example.restapi.home.data.model.response.ActorSearchModel
 import com.example.restapi.network.ApiClient
 import com.example.restapi.network.ApiInterface
 import retrofit2.Callback
@@ -27,6 +29,26 @@ class SearchRepository {
             }
 
             override fun onResponse(call: Call<MovieSearchModel>, response: Response<MovieSearchModel>) {
+                val res = response.body()
+                if (response.code() == 202 && res!=null){
+                    data.value = res
+                }else{
+                    data.value = null
+                }
+            }
+        })
+        return data
+    }
+    fun searchByActorName (actorName: String):LiveData<ActorSearchModel> {
+        val data = MutableLiveData<ActorSearchModel>()
+        val actorNameModel = SearchByActorNameModel(actorName)
+
+        apiInterface?.searchByActorName(actorNameModel)?.enqueue(object : Callback<ActorSearchModel>{
+            override fun onFailure(call: Call<ActorSearchModel>, t: Throwable) {
+                data.value = null
+            }
+
+            override fun onResponse(call: Call<ActorSearchModel>, response: Response<ActorSearchModel>) {
                 val res = response.body()
                 if (response.code() == 202 && res!=null){
                     data.value = res

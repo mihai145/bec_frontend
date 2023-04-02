@@ -7,16 +7,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.bec_client.R
+import com.example.restapi.home.data.model.ActorModel
+import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.data.model.MovieModel
 import kotlin.collections.ArrayList
 
 
-class MovieRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
+class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
-    private var items: List<MovieModel> = ArrayList()
+    private var items: ArrayList<CardModel> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolder(
@@ -38,9 +38,15 @@ class MovieRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
         return items.size
     }
 
-    fun submitList(List: List<MovieModel>){
-        Log.d("DEBUG in adapter",List.toString())
-        items = List
+    fun addEntry(card:CardModel){
+        items?.add(0,card)
+        notifyItemInserted(0)
+    }
+    fun submitList(List: List<CardModel>){
+        List.forEach { x -> addEntry(x) }
+    }
+    fun resetAdapter(){
+        items.clear()
         notifyDataSetChanged()
     }
 
@@ -53,7 +59,7 @@ class MovieRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
         val title = itemView.findViewById<TextView>(R.id.title)
         val body = itemView.findViewById<TextView>(R.id.body)
 
-        fun bind(movie: MovieModel){
+        fun bind(movie: CardModel){
             Log.d("Binding",movie.toString())
 //            TODO("this bad boy broken no idea why")
 //            val requestOptions = RequestOptions()
@@ -65,7 +71,7 @@ class MovieRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 //                .load(movie.posterPath)
 //                .into(image)
             title.setText(movie.title)
-            body.setText(movie.overview)
+            body.setText(movie.body)
         }
 
     }
