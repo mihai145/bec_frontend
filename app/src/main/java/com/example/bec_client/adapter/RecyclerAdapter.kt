@@ -14,8 +14,7 @@ import com.example.restapi.home.data.model.MovieModel
 import kotlin.collections.ArrayList
 
 
-class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
-{
+class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items: ArrayList<CardModel> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -25,7 +24,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder) {
+        when (holder) {
 
             is ViewHolder -> {
                 holder.bind(items.get(position))
@@ -38,15 +37,17 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
         return items.size
     }
 
-    fun addEntry(card:CardModel){
-        var pos = items.size
-        items?.add(card)
+    fun addEntry(card: CardModel) {
+        val pos = items.size
+        items.add(card)
         notifyItemInserted(pos)
     }
-    fun submitList(List: List<CardModel>){
+
+    fun submitList(List: List<CardModel>) {
         List.forEach { x -> addEntry(x) }
     }
-    fun resetAdapter(){
+
+    fun resetAdapter() {
         items.clear()
         notifyDataSetChanged()
     }
@@ -54,14 +55,14 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>()
     class ViewHolder
     constructor(
         itemView: View
-    ): RecyclerView.ViewHolder(itemView){
+    ) : RecyclerView.ViewHolder(itemView) {
 
         val image = itemView.findViewById<ImageView>(R.id.image)
         val title = itemView.findViewById<TextView>(R.id.title)
         val body = itemView.findViewById<TextView>(R.id.body)
 
-        fun bind(movie: CardModel){
-            Log.d("Binding",movie.toString())
+        fun bind(movie: CardModel) {
+            Log.d("Binding", movie.toString())
 //            TODO("this bad boy broken no idea why")
 //            val requestOptions = RequestOptions()
 //                .placeholder(R.drawable.ic_launcher_background)
