@@ -71,4 +71,7 @@ dependencies {
 
     // Add the Auth0 Android SDK
     implementation 'com.auth0.android:auth0:2.9.0'
+
+    // PostgreSQL connection
+    implementation 'org.postgresql:postgresql:42.2.9'
 }

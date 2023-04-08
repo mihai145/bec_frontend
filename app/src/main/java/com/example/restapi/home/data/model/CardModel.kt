@@ -12,4 +12,9 @@ class CardModel {
         title = actor.name
         body = "Actor known for " + actor.knownForDepartment
     }
+
+    constructor(user:UserModel) {
+        title = user.nickname
+        body = "User " + user.nickname
+    }
 }

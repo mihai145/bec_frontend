@@ -1,16 +1,24 @@
 package com.example.restapi.home.data.repository
 
+import android.os.StrictMode
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.bec_client.BuildConfig
+import com.example.restapi.home.data.model.UserModel
 import com.example.restapi.home.data.model.request.SearchByActorNameModel
 import com.example.restapi.home.data.model.response.MovieSearchModel
 import com.example.restapi.home.data.model.request.SearchByMovieNameModel
 import com.example.restapi.home.data.model.response.ActorSearchModel
+import com.example.restapi.home.data.model.response.UserSearchModel
 import com.example.restapi.network.ApiClient
 import com.example.restapi.network.ApiInterface
 import retrofit2.Callback
 import retrofit2.Call
 import retrofit2.Response
+import java.sql.DriverManager
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class SearchRepository {
     private var apiInterface:ApiInterface?=null
@@ -57,6 +65,33 @@ class SearchRepository {
                 }
             }
         })
+        return data
+    }
+
+    fun searchByUser (nickname: String):LiveData<UserSearchModel> {
+        val data = MutableLiveData<UserSearchModel>()
+        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+        val jdbcUrl = "jdbc:postgresql://${BuildConfig.DB_HOST}:${BuildConfig.DB_PORT}/${BuildConfig.DB_NAME}"
+        val executor = Executors.newSingleThreadExecutor()
+        executor.execute {
+            try {
+                val connection = DriverManager
+                    .getConnection(jdbcUrl, BuildConfig.DB_USERNAME, BuildConfig.DB_PASSWORD)
+                val query = connection.prepareStatement("SELECT nickname FROM users WHERE nickname LIKE '%$nickname%'")
+                val result = query.executeQuery()
+                val list = mutableListOf<UserModel>()
+                while(result.next()){
+                    val username = result.getString("nickname")
+                    list.add(UserModel(username))
+                }
+                data.postValue(UserSearchModel(list))
+            } catch (e: java.lang.Exception) {
+                Log.d("DEBUG: ", e.toString())
+            }
+        }
+        executor.shutdown()
+        executor.awaitTermination(1, TimeUnit.SECONDS)
         return data
     }
 }

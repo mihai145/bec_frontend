@@ -8,9 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bec_client.R
-import com.example.restapi.home.data.model.ActorModel
 import com.example.restapi.home.data.model.CardModel
-import com.example.restapi.home.data.model.MovieModel
 import kotlin.collections.ArrayList
 
 
