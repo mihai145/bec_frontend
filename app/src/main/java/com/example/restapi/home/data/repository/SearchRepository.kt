@@ -3,10 +3,12 @@ package com.example.restapi.home.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.restapi.home.data.model.request.ActorInfoModel
 import com.example.restapi.home.data.model.request.MovieInfoModel
 import com.example.restapi.home.data.model.request.SearchByActorNameModel
 import com.example.restapi.home.data.model.response.MovieResponseModel
 import com.example.restapi.home.data.model.request.SearchByMovieNameModel
+import com.example.restapi.home.data.model.response.ActorInfoResponseModel
 import com.example.restapi.home.data.model.response.ActorResponseModel
 import com.example.restapi.home.data.model.response.MovieInfoResponseModel
 import com.example.restapi.network.ApiClient
@@ -72,6 +74,26 @@ class SearchRepository {
             }
 
             override fun onResponse(call: Call<MovieInfoResponseModel>, response: Response<MovieInfoResponseModel>) {
+                val res = response.body()
+                if (response.code() == 202 && res!=null){
+                    data.value = res
+                }else{
+                    data.value = null
+                }
+            }
+        })
+        return data
+    }
+    fun actorInfo(actorId: Long): LiveData<ActorInfoResponseModel>{
+        val data = MutableLiveData<ActorInfoResponseModel>()
+        val requestModel = ActorInfoModel(actorId)
+        Log.d("Repo", "actorInfo $actorId")
+        apiInterface?.actorInfo(requestModel)?.enqueue(object : Callback<ActorInfoResponseModel>{
+            override fun onFailure(call: Call<ActorInfoResponseModel>, t: Throwable) {
+                data.value = null
+            }
+
+            override fun onResponse(call: Call<ActorInfoResponseModel>, response: Response<ActorInfoResponseModel>) {
                 val res = response.body()
                 if (response.code() == 202 && res!=null){
                     data.value = res

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.restapi.home.data.model.response.ActorInfoResponseModel
 import com.example.restapi.home.data.model.response.ActorResponseModel
 import com.example.restapi.home.data.model.response.MovieInfoResponseModel
 import com.example.restapi.home.data.model.response.MovieResponseModel
@@ -14,7 +15,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application){
     private var searchRepository: SearchRepository?=null
     var searchedMoviesLiveData: LiveData<MovieResponseModel>?=null
     var searchedActorsLiveData: LiveData<ActorResponseModel>?=null
-    var movieInfoLiveData: LiveData<MovieInfoResponseModel>?=null;
+    var movieInfoLiveData: LiveData<MovieInfoResponseModel>?=null
+    var actorInfoLiveData: LiveData<ActorInfoResponseModel>?=null
     init{
         searchRepository = SearchRepository()
         searchedMoviesLiveData = MutableLiveData()
@@ -30,5 +32,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application){
     }
     fun movieInfo(movieId: Long){
         movieInfoLiveData = searchRepository?.movieInfo(movieId)
+    }
+    fun actorInfo(actorId: Long){
+        actorInfoLiveData = searchRepository?.actorInfo(actorId)
     }
 }
