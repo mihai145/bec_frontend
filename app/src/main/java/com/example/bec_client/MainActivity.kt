@@ -13,6 +13,7 @@ import com.auth0.android.callback.Callback
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import com.auth0.android.result.UserProfile
+import com.example.bec_client.fragment.*
 
 class MainActivity : AppCompatActivity() {
     public lateinit var account: Auth0

@@ -1,4 +1,4 @@
-package com.example.bec_client
+package com.example.bec_client.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import com.example.bec_client.R
 import java.net.URL
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
