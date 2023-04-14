@@ -66,16 +66,17 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
 
         fun bind(card: CardModel) {
-            Log.d("Binding", card.toString())
 
             val requestOptions = RequestOptions()
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_background)
 
-            Glide.with(itemView.context)
-                .applyDefaultRequestOptions(requestOptions)
-                .load(card.imagePath)
-                .into(image)
+            if(card.imagePath != null) {
+                Glide.with(itemView.context)
+                    .applyDefaultRequestOptions(requestOptions)
+                    .load(card.imagePath)
+                    .into(image)
+            }
 
             title.text = card.title
             body.text = card.body
