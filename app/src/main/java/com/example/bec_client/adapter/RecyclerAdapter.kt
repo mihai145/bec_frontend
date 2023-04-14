@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.bec_client.activity.ActorActivity
 import com.example.bec_client.activity.MovieActivity
 import com.example.bec_client.R
@@ -65,16 +67,16 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         fun bind(card: CardModel) {
             Log.d("Binding", card.toString())
-            /*
+
             val requestOptions = RequestOptions()
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_background)
 
             Glide.with(itemView.context)
                 .applyDefaultRequestOptions(requestOptions)
-                .load(card.posterPath)
+                .load(card.imagePath)
                 .into(image)
-            */
+
             title.text = card.title
             body.text = card.body
 
