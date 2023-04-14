@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.bec_client.R
 import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.data.model.MovieModel
@@ -45,10 +46,17 @@ class MovieActivity : AppCompatActivity() {
                 movie = it.result
                 Log.d("RENDERING",movie.toString())
                 if (movie != null) {
-                    Glide.with(this)
-                        .load(movie.posterPath)
-                        .into(moviePoster)
+                    val requestOptions = RequestOptions()
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .error(R.drawable.ic_launcher_background)
 
+                    if(movie.posterPath != null)
+                    {
+                        Glide.with(this)
+                            .applyDefaultRequestOptions(requestOptions)
+                            .load(movie.posterPath)
+                            .into(moviePoster)
+                    }
                     movieTitle.text = movie.title
                     movieReleaseDate.text = movie.releaseDate
                     movieOverview.text = movie.overview

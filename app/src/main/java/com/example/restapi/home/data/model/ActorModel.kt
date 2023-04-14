@@ -28,5 +28,5 @@ data class ActorModel (
     val originalName: String,
 
     @SerializedName("profile_path")
-    val profilePath: Any? = null
+    val profilePath: String? = null
 )
