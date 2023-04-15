@@ -1,4 +1,4 @@
-package com.example.bec_client
+package com.example.bec_client.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +9,8 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.bec_client.MainActivity
+import com.example.bec_client.R
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.Executors

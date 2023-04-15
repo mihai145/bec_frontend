@@ -1,4 +1,4 @@
-package com.example.bec_client
+package com.example.bec_client.fragment
 
 import android.Manifest
 import android.content.ContentValues.TAG
@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.example.bec_client.R
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.SupportMapFragment

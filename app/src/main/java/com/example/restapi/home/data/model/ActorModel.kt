@@ -1,31 +1,32 @@
 package com.example.restapi.home.data.model
 
-import com.beust.klaxon.*
-
-private val klaxon = Klaxon()
+import com.google.gson.annotations.SerializedName
 
 data class ActorModel (
     val adult: Boolean,
+    val biography: String,
+    val birthday: String,
     val gender: Long,
     val id: Long,
 
-    @Json(name = "known_for")
+    @SerializedName("also_known_as")
+    val alsoKnownAs: List<Any?>,
+
+    @SerializedName("known_for")
     val knownFor: List<MovieModel>,
 
-    @Json(name = "known_for_department")
+    @SerializedName("known_for_department")
     val knownForDepartment: String,
 
-    val name: String,
+    @SerializedName("place_of_birth")
+    val placeOfBirth: String,
 
-    @Json(name = "original_name")
+    val name: String,
+    val popularity: Double,
+
+    @SerializedName("original_name")
     val originalName: String,
 
-    @Json(name = "profile_path")
-    val profilePath: Any? = null
-) {
-    public fun toJson() = klaxon.toJsonString(this)
-
-    companion object {
-        public fun fromJson(json: String) = klaxon.parse<MovieModel>(json)
-    }
-}
+    @SerializedName("profile_path")
+    val profilePath: String? = null
+)
