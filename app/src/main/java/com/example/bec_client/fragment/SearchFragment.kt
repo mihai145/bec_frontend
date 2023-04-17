@@ -1,4 +1,4 @@
-package com.example.bec_client
+package com.example.bec_client.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bec_client.R
 import com.example.bec_client.adapter.RecyclerAdapter
 import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.viewmodel.SearchViewModel

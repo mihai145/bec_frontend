@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/actor_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:adjustViewBounds="true"
+                android:padding="0dp"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/actor_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Actor Name"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/actor_biography"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Actor Biography"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

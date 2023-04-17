@@ -1,5 +1,6 @@
 package com.example.bec_client.adapter
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.example.bec_client.activity.ActorActivity
+import com.example.bec_client.activity.MovieActivity
 import com.example.bec_client.R
+import com.example.bec_client.activity.UserActivity
 import com.example.restapi.home.data.model.CardModel
 import kotlin.collections.ArrayList
 
@@ -50,30 +56,47 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    class ViewHolder
-    constructor(
-        itemView: View
-    ) : RecyclerView.ViewHolder(itemView) {
-
-        val image = itemView.findViewById<ImageView>(R.id.image)
-        val title = itemView.findViewById<TextView>(R.id.title)
-        val body = itemView.findViewById<TextView>(R.id.body)
-
-        fun bind(movie: CardModel) {
-            Log.d("Binding", movie.toString())
-//            TODO("this bad boy broken no idea why")
-//            val requestOptions = RequestOptions()
-//                .placeholder(R.drawable.ic_launcher_background)
-//                .error(R.drawable.ic_launcher_background)
-//
-//            Glide.with(itemView.context)
-//                .applyDefaultRequestOptions(requestOptions)
-//                .load(movie.posterPath)
-//                .into(image)
-            title.setText(movie.title)
-            body.setText(movie.body)
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val image: ImageView
+        val title: TextView
+        val body: TextView
+        init {
+            image = itemView.findViewById(R.id.image)
+            title = itemView.findViewById(R.id.title)
+            body = itemView.findViewById(R.id.body)
         }
 
+        fun bind(card: CardModel) {
+
+            val requestOptions = RequestOptions()
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_background)
+
+            if(card.imagePath != null) {
+                Glide.with(itemView.context)
+                    .applyDefaultRequestOptions(requestOptions)
+                    .load(card.imagePath)
+                    .into(image)
+            }
+
+            title.text = card.title
+            body.text = card.body
+
+            itemView.setOnClickListener {
+                var intent : Intent
+
+                when(card.type){
+                    1 -> intent = Intent(itemView.context, MovieActivity::class.java)
+                    2 -> intent = Intent(itemView.context, ActorActivity::class.java)
+                    3 -> intent = Intent(itemView.context, UserActivity::class.java)
+                    else -> {
+                        throw Exception("BAD CARD TYPE")
+                    }
+                }
+                intent?.putExtra("id", card.id)
+                itemView.context.startActivity(intent)
+            }
+        }
     }
 
 }

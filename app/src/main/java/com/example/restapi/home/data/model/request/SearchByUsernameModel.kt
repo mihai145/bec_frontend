@@ -1,6 +1,6 @@
 package com.example.restapi.home.data.model.request
 
-class SearchUserModel {
+class SearchByUsernameModel {
     var userName:String?=""
 
     constructor(userName: String?) {

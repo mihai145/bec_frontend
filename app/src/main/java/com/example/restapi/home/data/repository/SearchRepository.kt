@@ -1,24 +1,19 @@
 package com.example.restapi.home.data.repository
-
-import android.os.StrictMode
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.bec_client.BuildConfig
-import com.example.restapi.home.data.model.UserModel
+import com.example.restapi.home.data.model.request.ActorInfoModel
+import com.example.restapi.home.data.model.request.MovieInfoModel
+
 import com.example.restapi.home.data.model.request.SearchByActorNameModel
-import com.example.restapi.home.data.model.response.MovieSearchModel
 import com.example.restapi.home.data.model.request.SearchByMovieNameModel
-import com.example.restapi.home.data.model.response.ActorSearchModel
-import com.example.restapi.home.data.model.response.UserSearchModel
+import com.example.restapi.home.data.model.request.SearchByUsernameModel
+import com.example.restapi.home.data.model.response.*
 import com.example.restapi.network.ApiClient
 import com.example.restapi.network.ApiInterface
 import retrofit2.Callback
 import retrofit2.Call
 import retrofit2.Response
-import java.sql.DriverManager
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 
 class SearchRepository {
     private var apiInterface:ApiInterface?=null
@@ -27,16 +22,16 @@ class SearchRepository {
         apiInterface = ApiClient.getApiClient().create(ApiInterface::class.java)
     }
 
-    fun searchByMovieName(movieName : String):LiveData<MovieSearchModel>{
-        val data = MutableLiveData<MovieSearchModel>()
+    fun searchByMovieName(movieName : String):LiveData<MovieResponseModel>{
+        val data = MutableLiveData<MovieResponseModel>()
         val movieNameModel = SearchByMovieNameModel(movieName)
 
-        apiInterface?.searchByMovieName(movieNameModel)?.enqueue(object : Callback<MovieSearchModel>{
-            override fun onFailure(call: Call<MovieSearchModel>, t: Throwable) {
+        apiInterface?.searchByMovieName(movieNameModel)?.enqueue(object : Callback<MovieResponseModel>{
+            override fun onFailure(call: Call<MovieResponseModel>, t: Throwable) {
                 data.value = null
             }
 
-            override fun onResponse(call: Call<MovieSearchModel>, response: Response<MovieSearchModel>) {
+            override fun onResponse(call: Call<MovieResponseModel>, response: Response<MovieResponseModel>) {
                 val res = response.body()
                 if (response.code() == 202 && res!=null){
                     data.value = res
@@ -47,16 +42,56 @@ class SearchRepository {
         })
         return data
     }
-    fun searchByActorName (actorName: String):LiveData<ActorSearchModel> {
-        val data = MutableLiveData<ActorSearchModel>()
+    fun searchByActorName (actorName: String):LiveData<ActorResponseModel> {
+        val data = MutableLiveData<ActorResponseModel>()
         val actorNameModel = SearchByActorNameModel(actorName)
 
-        apiInterface?.searchByActorName(actorNameModel)?.enqueue(object : Callback<ActorSearchModel>{
-            override fun onFailure(call: Call<ActorSearchModel>, t: Throwable) {
+        apiInterface?.searchByActorName(actorNameModel)?.enqueue(object : Callback<ActorResponseModel>{
+            override fun onFailure(call: Call<ActorResponseModel>, t: Throwable) {
                 data.value = null
             }
 
-            override fun onResponse(call: Call<ActorSearchModel>, response: Response<ActorSearchModel>) {
+            override fun onResponse(call: Call<ActorResponseModel>, response: Response<ActorResponseModel>) {
+                val res = response.body()
+                if (response.code() == 202 && res!=null){
+                    data.value = res
+                }else{
+                    data.value = null
+                }
+            }
+        })
+        return data
+    }
+    fun movieInfo(movieId: Long): LiveData<MovieInfoResponseModel>{
+        val data = MutableLiveData<MovieInfoResponseModel>()
+        val requestModel = MovieInfoModel(movieId)
+        Log.d("Repo", "movieInfo $movieId")
+        apiInterface?.movieInfo(requestModel)?.enqueue(object : Callback<MovieInfoResponseModel>{
+            override fun onFailure(call: Call<MovieInfoResponseModel>, t: Throwable) {
+                data.value = null
+            }
+
+            override fun onResponse(call: Call<MovieInfoResponseModel>, response: Response<MovieInfoResponseModel>) {
+                val res = response.body()
+                if (response.code() == 202 && res!=null){
+                    data.value = res
+                }else{
+                    data.value = null
+                }
+            }
+        })
+        return data
+    }
+    fun actorInfo(actorId: Long): LiveData<ActorInfoResponseModel>{
+        val data = MutableLiveData<ActorInfoResponseModel>()
+        val requestModel = ActorInfoModel(actorId)
+        Log.d("Repo", "actorInfo $actorId")
+        apiInterface?.actorInfo(requestModel)?.enqueue(object : Callback<ActorInfoResponseModel>{
+            override fun onFailure(call: Call<ActorInfoResponseModel>, t: Throwable) {
+                data.value = null
+            }
+
+            override fun onResponse(call: Call<ActorInfoResponseModel>, response: Response<ActorInfoResponseModel>) {
                 val res = response.body()
                 if (response.code() == 202 && res!=null){
                     data.value = res
@@ -70,28 +105,22 @@ class SearchRepository {
 
     fun searchByUser (nickname: String):LiveData<UserSearchModel> {
         val data = MutableLiveData<UserSearchModel>()
-        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
-        val jdbcUrl = "jdbc:postgresql://${BuildConfig.DB_HOST}:${BuildConfig.DB_PORT}/${BuildConfig.DB_NAME}"
-        val executor = Executors.newSingleThreadExecutor()
-        executor.execute {
-            try {
-                val connection = DriverManager
-                    .getConnection(jdbcUrl, BuildConfig.DB_USERNAME, BuildConfig.DB_PASSWORD)
-                val query = connection.prepareStatement("SELECT nickname FROM users WHERE nickname LIKE '%$nickname%'")
-                val result = query.executeQuery()
-                val list = mutableListOf<UserModel>()
-                while(result.next()){
-                    val username = result.getString("nickname")
-                    list.add(UserModel(username))
-                }
-                data.postValue(UserSearchModel(list))
-            } catch (e: java.lang.Exception) {
-                Log.d("DEBUG: ", e.toString())
+        val userNameModel = SearchByUsernameModel(nickname)
+
+        apiInterface?.searchByUserName(userNameModel)?.enqueue(object : Callback<UserSearchModel>{
+            override fun onFailure(call: Call<UserSearchModel>, t: Throwable) {
+                data.value = null
             }
-        }
-        executor.shutdown()
-        executor.awaitTermination(1, TimeUnit.SECONDS)
+
+            override fun onResponse(call: Call<UserSearchModel>, response: Response<UserSearchModel>) {
+                val res = response.body()
+                if (response.code() == 202 && res!=null){
+                    data.value = res
+                }else{
+                    data.value = null
+                }
+            }
+        })
         return data
     }
 }
