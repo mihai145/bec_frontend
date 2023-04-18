@@ -35,19 +35,23 @@ class ProfileFragment : Fragment() {
         val profileInfo: TextView? = view?.findViewById(R.id.profile_text_view)
         val button: Button? = view?.findViewById(R.id.login_logout_button)
 
-        val mainActivity = activity as MainActivity
+        val mainActivity = activity as? MainActivity
 
-        if (mainActivity.cachedCredentials == null) {
+        if (MainActivity.cachedCredentials == null) {
             profileInfo?.text = "You are not logged in"
             button?.text = "LOGIN"
             button?.setOnClickListener {
-                mainActivity.loginWithBrowser()
+                if (mainActivity != null) {
+                    mainActivity.loginWithBrowser()
+                }
             }
         } else {
-            profileInfo?.text = "Hello " + mainActivity.cachedUserProfile?.name
+            profileInfo?.text = "Hello " + MainActivity.cachedUserProfile?.name
             button?.text = "LOGOUT"
             button?.setOnClickListener {
-                mainActivity.logout()
+                if (mainActivity != null) {
+                    mainActivity.logout()
+                }
             }
         }
     }
@@ -64,15 +68,13 @@ class ProfileFragment : Fragment() {
             val executor = Executors.newSingleThreadExecutor()
             executor.execute {
                 try {
-
                     val myURL = URL("https://teambec.live/amILoggedIn")
                     val myURLConnection: HttpURLConnection =
                         myURL.openConnection() as HttpURLConnection
 
-                    val mainActivity = activity as MainActivity
                     var bearer = "null"
-                    if (mainActivity.cachedCredentials != null) {
-                        bearer = mainActivity.cachedCredentials?.idToken.toString()
+                    if (MainActivity.cachedCredentials != null) {
+                        bearer = MainActivity.cachedCredentials?.idToken.toString()
                     }
 
                     Log.d("BEARER", bearer)

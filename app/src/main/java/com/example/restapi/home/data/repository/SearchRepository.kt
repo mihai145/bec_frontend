@@ -2,12 +2,9 @@ package com.example.restapi.home.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.restapi.home.data.model.request.ActorInfoModel
-import com.example.restapi.home.data.model.request.MovieInfoModel
+import com.example.bec_client.MainActivity
+import com.example.restapi.home.data.model.request.*
 
-import com.example.restapi.home.data.model.request.SearchByActorNameModel
-import com.example.restapi.home.data.model.request.SearchByMovieNameModel
-import com.example.restapi.home.data.model.request.SearchByUsernameModel
 import com.example.restapi.home.data.model.response.*
 import com.example.restapi.network.ApiClient
 import com.example.restapi.network.ApiInterface
@@ -97,6 +94,75 @@ class SearchRepository {
                     data.value = res
                 }else{
                     data.value = null
+                }
+            }
+        })
+        return data
+    }
+
+    fun userFollowInfo (followerId: Long, followeeId: Long): LiveData<UserFollowResponseModel> {
+        val data = MutableLiveData<UserFollowResponseModel>()
+        val requestModel = UserFollowModel(followerId, followeeId)
+        apiInterface?.userFollowInfo(MainActivity.cachedCredentials?.idToken.toString(), requestModel)?.enqueue(object : Callback<UserFollowResponseModel>{
+            override fun onFailure(call: Call<UserFollowResponseModel>, t: Throwable) {
+                data.value = null
+            }
+
+            override fun onResponse(
+                call: Call<UserFollowResponseModel>,
+                response: Response<UserFollowResponseModel>
+            ) {
+                val res = response.body()
+                if (response.code() == 202 && res!=null){
+                    data.value = res
+                }else{
+                    data.value = null
+                }
+            }
+        })
+        return data
+    }
+
+    fun follow (followerId: Long, followeeId: Long): SimpleResponseModel {
+        var data = SimpleResponseModel(ok = false, reason = "Failure")
+        val requestModel = UserFollowModel(followerId, followeeId)
+        apiInterface?.follow(MainActivity.cachedCredentials?.idToken.toString(), requestModel)?.enqueue(object : Callback<SimpleResponseModel>{
+            override fun onFailure(call: Call<SimpleResponseModel>, t: Throwable) {
+                data = SimpleResponseModel(ok = false, reason = "Failure")
+            }
+
+            override fun onResponse(
+                call: Call<SimpleResponseModel>,
+                response: Response<SimpleResponseModel>
+            ) {
+                val res = response.body()
+                if (response.code() == 202 && res!=null && res.ok == true){
+                    data = res
+                }else{
+                    data = SimpleResponseModel(ok = false, reason = "Failure")
+                }
+            }
+        })
+        return data
+    }
+
+    fun unfollow (followerId: Long, followeeId: Long): SimpleResponseModel {
+        var data = SimpleResponseModel(ok = false, reason = "Failure")
+        val requestModel = UserFollowModel(followerId, followeeId)
+        apiInterface?.unfollow(MainActivity.cachedCredentials?.idToken.toString(), requestModel)?.enqueue(object : Callback<SimpleResponseModel>{
+            override fun onFailure(call: Call<SimpleResponseModel>, t: Throwable) {
+                data = SimpleResponseModel(ok = false, reason = "Failure")
+            }
+
+            override fun onResponse(
+                call: Call<SimpleResponseModel>,
+                response: Response<SimpleResponseModel>
+            ) {
+                val res = response.body()
+                if (response.code() == 202 && res!=null && res.ok == true){
+                    data = res
+                }else{
+                    data = SimpleResponseModel(ok = false, reason = "Failure")
                 }
             }
         })

@@ -1,7 +1,6 @@
 package com.example.restapi.home.viewmodel
 
 import android.app.Application
-import android.provider.ContactsContract.CommonDataKinds.Nickname
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,6 +15,9 @@ class SearchViewModel(application: Application) : AndroidViewModel(application){
     var searchedUsersLiveData: LiveData<UserSearchModel>?=null
     var movieInfoLiveData: LiveData<MovieInfoResponseModel>?=null
     var actorInfoLiveData: LiveData<ActorInfoResponseModel>?=null
+    var userFollowLiveData: LiveData<UserFollowResponseModel>?=null
+    var followPostResponse: SimpleResponseModel?=null
+    var unfollowPostResponse: SimpleResponseModel?=null
     init{
         searchRepository = SearchRepository()
         searchedMoviesLiveData = MutableLiveData()
@@ -38,4 +40,13 @@ class SearchViewModel(application: Application) : AndroidViewModel(application){
     fun actorInfo(actorId: Long){
         actorInfoLiveData = searchRepository?.actorInfo(actorId)
     }
+    fun userFollowInfo(followerId: Long, followeeId: Long) {
+        userFollowLiveData = searchRepository?.userFollowInfo(followerId, followeeId)
+    }
+//    fun follow(followerId: Long, followeeId: Long) {
+//        followPostResponse = searchRepository?.follow(followerId, followeeId)
+//    }
+//    fun unfollow(followerId: Long, followeeId: Long) {
+//        unfollowPostResponse = searchRepository?.unfollow(followerId, followeeId)
+//    }
 }

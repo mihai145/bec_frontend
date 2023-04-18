@@ -10,6 +10,7 @@ import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.AuthenticationException
 import com.auth0.android.callback.Callback
+import com.auth0.android.jwt.JWT
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import com.auth0.android.result.UserProfile
@@ -17,9 +18,13 @@ import com.example.bec_client.fragment.*
 
 class MainActivity : AppCompatActivity() {
     public lateinit var account: Auth0
-    public var cachedCredentials: Credentials? = null
-    public var cachedUserProfile: UserProfile? = null
     private val profileFragment = ProfileFragment()
+
+    companion object {
+        public var cachedCredentials: Credentials? = null
+        public var cachedUserProfile: UserProfile? = null
+        public var userId: Int? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +56,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun getUserId(idToken: String): Int {
+        val jwt = JWT(idToken)
+        val id = jwt.subject?.removePrefix("auth0|")
+        Log.d("Decoded ID", id.toString())
+        return id!!.toInt()
+    }
+
     public fun loginWithBrowser() {
         // Setup the WebAuthProvider, using the custom scheme and scope.
 
@@ -69,6 +81,7 @@ class MainActivity : AppCompatActivity() {
                     // Get the access token from the credentials object.
                     // This can be used to call APIs
                     cachedCredentials = credentials
+                    userId = getUserId(cachedCredentials!!.idToken)
 
                     Log.d("ID TOKEN", credentials.idToken)
                     showUserProfile(credentials.accessToken)
