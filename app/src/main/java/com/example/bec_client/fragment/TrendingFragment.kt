@@ -48,22 +48,19 @@ class TrendingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
         val view = inflater.inflate(R.layout.fragment_trending, container, false)
         val recyclerView = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.trendingRecyclerView)
         recyclerAdapter = RecyclerAdapter()
         recyclerView.adapter = recyclerAdapter
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
 
-        // this page should have a way to select a genre in a spinner
-        // and then a list of movies in that genre in a recycler view
-
         var genreList = listOf<GenreModel>()
         trendingViewModel.getGenres()
         trendingViewModel.genresLiveData?.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 genreList = it.results!!
-                // create a dictionary with genre : id from genreList
+
                 var genreDict = mutableMapOf<String, Long>()
                 for (genre in genreList) {
                     genreDict[genre.name] = genre.id
@@ -78,8 +75,7 @@ class TrendingFragment : Fragment() {
 
                 genreSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                        // An item was selected. You can retrieve the selected item using
-                        // parent.getItemAtPosition(pos)
+
                         val genreId = genreDict[parent.getItemAtPosition(position).toString()]
                         doTheTrending(genreId!!.toInt())
                     }
@@ -93,10 +89,6 @@ class TrendingFragment : Fragment() {
                 Log.d("DEBUG: ", "a crapat")
             }
         })
-
-
-        // find the spinner and set the adapter to the list of genres
-
 
         return view
     }
