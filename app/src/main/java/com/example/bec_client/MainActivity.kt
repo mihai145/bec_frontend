@@ -1,11 +1,9 @@
 package com.example.bec_client
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
-
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.AuthenticationException
@@ -15,15 +13,20 @@ import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import com.auth0.android.result.UserProfile
 import com.example.bec_client.fragment.*
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
-    public lateinit var account: Auth0
+    lateinit var account: Auth0
     private val profileFragment = ProfileFragment()
+    private val homeFragment = HomeFragment()
+    private val searchFragment = SearchFragment()
+    private val trendingFragment = TrendingFragment()
+    private val nearbyFragment = NearbyFragment()
 
     companion object {
-        public var cachedCredentials: Credentials? = null
-        public var cachedUserProfile: UserProfile? = null
-        public var userId: Int? = null
+        var cachedCredentials: Credentials? = null
+        var cachedUserProfile: UserProfile? = null
+        var userId: Int? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,16 +39,10 @@ class MainActivity : AppCompatActivity() {
             "dev-jc1flmgwmyky8n0k.us.auth0.com"
         )
 
-        // profile fragment is a data member
-        val homeFragment = HomeFragment()
-        val searchFragment = SearchFragment()
-        val trendingFragment = TrendingFragment()
-        val nearbyFragment = NearbyFragment()
-
         setCurrentFragment(homeFragment)
         val bottomBar = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomBar.setOnItemSelectedListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.home -> setCurrentFragment(homeFragment)
                 R.id.trending -> setCurrentFragment(trendingFragment)
                 R.id.search -> setCurrentFragment(searchFragment)
@@ -63,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         return id!!.toInt()
     }
 
-    public fun loginWithBrowser() {
+    fun loginWithBrowser() {
         // Setup the WebAuthProvider, using the custom scheme and scope.
 
         WebAuthProvider.login(account)
@@ -89,10 +86,10 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    public fun logout() {
+    fun logout() {
         WebAuthProvider.logout(account)
             .withScheme("demo")
-            .start(this, object: Callback<Void?, AuthenticationException> {
+            .start(this, object : Callback<Void?, AuthenticationException> {
                 override fun onSuccess(payload: Void?) {
                     // The user has been logged out!
                     cachedUserProfile = null
@@ -105,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    public fun showUserProfile(accessToken: String) {
+    fun showUserProfile(accessToken: String) {
         val client = AuthenticationAPIClient(account)
 
         // With the access token, call `userInfo` and get the profile from Auth0.

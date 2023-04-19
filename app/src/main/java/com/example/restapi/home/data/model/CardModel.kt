@@ -28,4 +28,13 @@ class CardModel {
         id = user.id
         type = 3
     }
+
+    constructor(post:PostModel) {
+        val title = post.title
+        val author = post.authorNickname
+        this.title = "$title by $author"
+        this.body = post.content
+        this.id = post.id
+        this.type = 4
+    }
 }

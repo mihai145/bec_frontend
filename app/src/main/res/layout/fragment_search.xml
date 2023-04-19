@@ -12,7 +12,7 @@
         android:id="@+id/SearchView"
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:queryHint="Search Here"/>
+        android:queryHint="Search Here" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
