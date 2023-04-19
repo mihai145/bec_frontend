@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.bec_client.MainActivity
 import com.example.bec_client.activity.ActorActivity
 import com.example.bec_client.activity.MovieActivity
 import com.example.bec_client.R
@@ -94,6 +95,9 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     }
                 }
                 intent?.putExtra("id", card.id)
+                if (card.type == 3) {
+                    intent?.putExtra("nickname", card.title)
+                }
                 itemView.context.startActivity(intent)
             }
         }

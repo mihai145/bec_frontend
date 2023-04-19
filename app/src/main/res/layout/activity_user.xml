@@ -21,6 +21,13 @@
                 android:text="User Name"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/follow_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading"
+                />
         </LinearLayout>
     </ScrollView>
 
