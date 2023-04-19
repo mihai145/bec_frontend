@@ -239,6 +239,7 @@ class SearchRepository {
         })
         return data
     }
+
     fun getPosts(): LiveData<PostsResponseModel> {
         val data = MutableLiveData<PostsResponseModel>()
 
