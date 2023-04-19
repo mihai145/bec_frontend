@@ -41,6 +41,7 @@ interface ApiInterface {
 
     @POST("search/nickname")
     fun searchByUserName(@Body nickname: SearchByUsernameModel): Call<UserSearchModel>
+<<<<<<< HEAD
 
     @POST("didIReview")
     fun didIReview(
@@ -74,4 +75,8 @@ interface ApiInterface {
 
     @GET("posts")
     fun posts(@Header("Bearer") token: String): Call<PostsResponseModel>
+    @GET("genres")
+    fun getGenres(): Call<GenreResponseModel>
+    @POST("trending")
+    fun getTrending(@Body genreId: SearchByGenreIdModel): Call<TrendingResponseModel>
 }
