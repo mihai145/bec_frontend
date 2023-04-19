@@ -29,7 +29,9 @@ class SearchFragment : Fragment() {
     private fun search(query: String) {
         recyclerAdapter.resetAdapter()
         searchViewModel.searchMoviesByName(query)
+        searchViewModel.searchUser(query)
         searchViewModel.searchActorByName(query)
+
 
         searchViewModel.searchedMoviesLiveData?.observe(this, Observer {
             if (it!=null){
@@ -40,6 +42,14 @@ class SearchFragment : Fragment() {
             }
         })
         searchViewModel.searchedActorsLiveData?.observe(this, Observer {
+            if (it!=null){
+                recyclerAdapter.submitList(it.results.map { x -> CardModel(x) })
+                Log.d("Debug",it.toString())
+            }else{
+                Log.d("DEBUG: ", "a crapat")
+            }
+        })
+        searchViewModel.searchedUsersLiveData?.observe(this, Observer {
             if (it!=null){
                 recyclerAdapter.submitList(it.results.map { x -> CardModel(x) })
                 Log.d("Debug",it.toString())

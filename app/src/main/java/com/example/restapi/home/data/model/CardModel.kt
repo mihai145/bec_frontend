@@ -21,4 +21,10 @@ class CardModel {
         id = actor.id
         type = 2
     }
+
+    constructor(user:UserModel) {
+        title = user.nickname
+        body = "User " + user.nickname
+        type = 3
+    }
 }

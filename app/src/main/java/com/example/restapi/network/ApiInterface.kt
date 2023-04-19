@@ -8,6 +8,8 @@ import com.example.restapi.home.data.model.request.SearchByMovieNameModel
 import com.example.restapi.home.data.model.response.ActorInfoResponseModel
 import com.example.restapi.home.data.model.response.ActorResponseModel
 import com.example.restapi.home.data.model.response.MovieInfoResponseModel
+import com.example.restapi.home.data.model.request.SearchByUsernameModel
+import com.example.restapi.home.data.model.response.UserSearchModel
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -21,4 +23,6 @@ interface ApiInterface {
     fun movieInfo(@Body movieId : MovieInfoModel): Call <MovieInfoResponseModel>
     @POST("search/actorId")
     fun actorInfo(@Body actorId : ActorInfoModel): Call <ActorInfoResponseModel>
+    @POST("search/nickname")
+    fun searchByUserName(@Body nickname: SearchByUsernameModel): Call<UserSearchModel>
 }

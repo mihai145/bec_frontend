@@ -1,16 +1,14 @@
 package com.example.restapi.home.data.repository
-
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.restapi.home.data.model.request.ActorInfoModel
 import com.example.restapi.home.data.model.request.MovieInfoModel
+
 import com.example.restapi.home.data.model.request.SearchByActorNameModel
-import com.example.restapi.home.data.model.response.MovieResponseModel
 import com.example.restapi.home.data.model.request.SearchByMovieNameModel
-import com.example.restapi.home.data.model.response.ActorInfoResponseModel
-import com.example.restapi.home.data.model.response.ActorResponseModel
-import com.example.restapi.home.data.model.response.MovieInfoResponseModel
+import com.example.restapi.home.data.model.request.SearchByUsernameModel
+import com.example.restapi.home.data.model.response.*
 import com.example.restapi.network.ApiClient
 import com.example.restapi.network.ApiInterface
 import retrofit2.Callback
@@ -94,6 +92,27 @@ class SearchRepository {
             }
 
             override fun onResponse(call: Call<ActorInfoResponseModel>, response: Response<ActorInfoResponseModel>) {
+                val res = response.body()
+                if (response.code() == 202 && res!=null){
+                    data.value = res
+                }else{
+                    data.value = null
+                }
+            }
+        })
+        return data
+    }
+
+    fun searchByUser (nickname: String):LiveData<UserSearchModel> {
+        val data = MutableLiveData<UserSearchModel>()
+        val userNameModel = SearchByUsernameModel(nickname)
+
+        apiInterface?.searchByUserName(userNameModel)?.enqueue(object : Callback<UserSearchModel>{
+            override fun onFailure(call: Call<UserSearchModel>, t: Throwable) {
+                data.value = null
+            }
+
+            override fun onResponse(call: Call<UserSearchModel>, response: Response<UserSearchModel>) {
                 val res = response.body()
                 if (response.code() == 202 && res!=null){
                     data.value = res

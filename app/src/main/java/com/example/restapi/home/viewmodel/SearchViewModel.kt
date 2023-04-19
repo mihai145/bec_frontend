@@ -1,13 +1,11 @@
 package com.example.restapi.home.viewmodel
 
 import android.app.Application
+import android.provider.ContactsContract.CommonDataKinds.Nickname
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.restapi.home.data.model.response.ActorInfoResponseModel
-import com.example.restapi.home.data.model.response.ActorResponseModel
-import com.example.restapi.home.data.model.response.MovieInfoResponseModel
-import com.example.restapi.home.data.model.response.MovieResponseModel
+import com.example.restapi.home.data.model.response.*
 import com.example.restapi.home.data.repository.SearchRepository
 
 class SearchViewModel(application: Application) : AndroidViewModel(application){
@@ -15,6 +13,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application){
     private var searchRepository: SearchRepository?=null
     var searchedMoviesLiveData: LiveData<MovieResponseModel>?=null
     var searchedActorsLiveData: LiveData<ActorResponseModel>?=null
+    var searchedUsersLiveData: LiveData<UserSearchModel>?=null
     var movieInfoLiveData: LiveData<MovieInfoResponseModel>?=null
     var actorInfoLiveData: LiveData<ActorInfoResponseModel>?=null
     init{
@@ -24,6 +23,9 @@ class SearchViewModel(application: Application) : AndroidViewModel(application){
         movieInfoLiveData = MutableLiveData()
     }
 
+    fun searchUser(nickname: String) {
+        searchedUsersLiveData = searchRepository?.searchByUser(nickname)
+    }
     fun searchMoviesByName(movieName: String){
         searchedMoviesLiveData = searchRepository?.searchByMovieName(movieName)
     }

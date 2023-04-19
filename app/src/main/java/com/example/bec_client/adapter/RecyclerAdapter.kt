@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.bec_client.activity.ActorActivity
 import com.example.bec_client.activity.MovieActivity
 import com.example.bec_client.R
+import com.example.bec_client.activity.UserActivity
 import com.example.restapi.home.data.model.CardModel
 import kotlin.collections.ArrayList
 
@@ -87,6 +88,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 when(card.type){
                     1 -> intent = Intent(itemView.context, MovieActivity::class.java)
                     2 -> intent = Intent(itemView.context, ActorActivity::class.java)
+                    3 -> intent = Intent(itemView.context, UserActivity::class.java)
                     else -> {
                         throw Exception("BAD CARD TYPE")
                     }

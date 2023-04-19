@@ -21,6 +21,9 @@
             android:name=".activity.ActorActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.UserActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.MovieActivity"
             android:exported="false" />
         <activity
