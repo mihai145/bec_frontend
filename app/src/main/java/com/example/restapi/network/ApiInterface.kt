@@ -5,6 +5,7 @@ import com.example.restapi.home.data.model.response.*
 import org.intellij.lang.annotations.Language
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 
@@ -25,4 +26,8 @@ interface ApiInterface {
     fun unfollow(@Header("Bearer") token : String, @Body follow : UserFollowModel): Call<SimpleResponseModel>
     @POST("search/nickname")
     fun searchByUserName(@Body nickname: SearchByUsernameModel): Call<UserSearchModel>
+    @GET("genres")
+    fun getGenres(): Call<GenreResponseModel>
+    @POST("trending")
+    fun getTrending(@Body genreId: SearchByGenreIdModel): Call<TrendingResponseModel>
 }

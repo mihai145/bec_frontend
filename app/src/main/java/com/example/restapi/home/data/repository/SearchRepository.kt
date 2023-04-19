@@ -189,4 +189,6 @@ class SearchRepository {
         })
         return data
     }
+
+
 }

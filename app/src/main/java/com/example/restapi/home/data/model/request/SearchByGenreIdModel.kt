@@ -1,9 +1,6 @@
 package com.example.restapi.home.data.model.request;
 
-class SearchByGenreIdModel {
-    var genreId: Int? = 0
+class SearchByGenreIdModel(genreId: Int) {
+    var genreId: Int? = genreId
 
-    constructor(genreId: Int) {
-        this.genreId = genreId
-    }
 }
