@@ -9,29 +9,37 @@
     <TextView
         android:id="@+id/newPostTitle"
         android:text="NEW POST"
-        android:textSize="20dp"
-        android:layout_width="wrap_content"
+        android:textSize="40sp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="movieName"
+        android:id="@+id/movieNameTextView"
+        app:layout_constraintTop_toBottomOf="@id/newPostTitle"
+        android:gravity="center"
+        android:textSize="30sp"
+
+
+        />
 
     <EditText
         android:id="@+id/titleEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/newPostTitle"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toTopOf="@id/contentEditText"
         android:hint="Title" />
 
     <EditText
         android:id="@+id/contentEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleEditText"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        app:layout_constraintBottom_toTopOf="@id/submitButton"
         android:hint="Content" />
 
     <com.google.android.material.button.MaterialButton
@@ -41,6 +49,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/contentEditText" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

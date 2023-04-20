@@ -26,6 +26,7 @@ class PostFormActivity : AppCompatActivity() {
     private var content: String = ""
 
     private lateinit var newPostTitle: TextView
+    private lateinit var movieNameTextView: TextView
     private lateinit var titleEditText: EditText
     private lateinit var contentEditText: EditText
     private lateinit var submitButton: Button
@@ -60,9 +61,11 @@ class PostFormActivity : AppCompatActivity() {
         titleEditText = findViewById(R.id.titleEditText)
         contentEditText = findViewById(R.id.contentEditText)
         submitButton = findViewById(R.id.submitButton)
+        movieNameTextView = findViewById(R.id.movieNameTextView)
 
         titleEditText.setText(title)
         contentEditText.setText(content)
+        if (movieName != null) movieNameTextView.text = movieName
 
         // get user id from id token...
         val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
