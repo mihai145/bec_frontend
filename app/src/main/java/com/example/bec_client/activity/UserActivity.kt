@@ -1,11 +1,11 @@
 package com.example.bec_client.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.bec_client.MainActivity
@@ -20,7 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class UserActivity : AppCompatActivity() {
-    private var id : Long = 0
+    private var id: Long = 0
     private var nickname: String = ""
     private var following: Boolean = false
     private lateinit var searchViewModel: SearchViewModel
@@ -29,7 +29,7 @@ class UserActivity : AppCompatActivity() {
     private lateinit var username: TextView
     private lateinit var followButton: Button
 
-    private var apiInterface: ApiInterface?=null
+    private var apiInterface: ApiInterface? = null
 
     init {
         apiInterface = ApiClient.getApiClient().create(ApiInterface::class.java)
@@ -41,11 +41,11 @@ class UserActivity : AppCompatActivity() {
 
         username = findViewById(R.id.username)
 
-        id = intent.getLongExtra("id",-1)
+        id = intent.getLongExtra("id", -1)
         Log.d("Creating User Activity Instance", "id $id")
 
         nickname = intent.getStringExtra("nickname").toString()
-        if(id == -1L || nickname == "")
+        if (id == -1L || nickname == "")
             throw Exception("Malformed User Activity")
         username.text = "User $nickname"
 
@@ -59,7 +59,8 @@ class UserActivity : AppCompatActivity() {
         followButton.setOnClickListener {
             if (followButton.text != "LOADING") {
                 if (MainActivity.cachedCredentials == null) {
-                    Toast.makeText(this, "You need to be logged in to do that", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "You need to be logged in to do that", Toast.LENGTH_SHORT)
+                        .show()
                 } else if (userId.toLong() == id) {
                     Toast.makeText(this, "You cannot follow yourself", Toast.LENGTH_SHORT).show()
                 } else {
@@ -68,10 +69,17 @@ class UserActivity : AppCompatActivity() {
                         followButton.text = "LOADING"
 
                         val requestModel = UserFollowModel(userId.toLong(), id)
-                        apiInterface?.unfollow(MainActivity.cachedCredentials?.idToken.toString(), requestModel)?.enqueue(object :
+                        apiInterface?.unfollow(
+                            MainActivity.cachedCredentials?.idToken.toString(),
+                            requestModel
+                        )?.enqueue(object :
                             Callback<SimpleResponseModel> {
                             override fun onFailure(call: Call<SimpleResponseModel>, t: Throwable) {
-                                Toast.makeText(applicationContext, "Please try again", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Please try again",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 followButton.text = "UNFOLLOW"
                             }
 
@@ -80,12 +88,20 @@ class UserActivity : AppCompatActivity() {
                                 response: Response<SimpleResponseModel>
                             ) {
                                 val res = response.body()
-                                if (response.code() == 202 && res!=null && res.ok == true){
-                                    following = !following;
+                                if (response.code() == 202 && res != null && res.ok == true) {
+                                    following = !following
                                     followButton.text = "FOLLOW"
-                                    Toast.makeText(applicationContext, "Unfollowed", Toast.LENGTH_SHORT).show()
-                                }else{
-                                    Toast.makeText(applicationContext, "Please try again", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Unfollowed",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Please try again",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     followButton.text = "UNFOLLOW"
                                 }
                             }
@@ -95,10 +111,17 @@ class UserActivity : AppCompatActivity() {
                         followButton.text = "LOADING"
 
                         val requestModel = UserFollowModel(userId.toLong(), id)
-                        apiInterface?.follow(MainActivity.cachedCredentials?.idToken.toString(), requestModel)?.enqueue(object :
+                        apiInterface?.follow(
+                            MainActivity.cachedCredentials?.idToken.toString(),
+                            requestModel
+                        )?.enqueue(object :
                             Callback<SimpleResponseModel> {
                             override fun onFailure(call: Call<SimpleResponseModel>, t: Throwable) {
-                                Toast.makeText(applicationContext, "Please try again", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Please try again",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 followButton.text = "FOLLOW"
                             }
 
@@ -107,12 +130,20 @@ class UserActivity : AppCompatActivity() {
                                 response: Response<SimpleResponseModel>
                             ) {
                                 val res = response.body()
-                                if (response.code() == 202 && res!=null && res.ok == true){
-                                    following = !following;
+                                if (response.code() == 202 && res != null && res.ok) {
+                                    following = !following
                                     followButton.text = "UNFOLLOW"
-                                    Toast.makeText(applicationContext, "Followed", Toast.LENGTH_SHORT).show()
-                                }else{
-                                    Toast.makeText(applicationContext, "Please try again", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Followed",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Please try again",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     followButton.text = "FOLLOW"
                                 }
                             }

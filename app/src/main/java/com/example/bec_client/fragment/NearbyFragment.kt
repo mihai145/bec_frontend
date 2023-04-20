@@ -5,12 +5,12 @@ import android.content.ContentValues.TAG
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import com.example.bec_client.R
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -18,11 +18,11 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
-import java.net.HttpURLConnection
-import java.net.URL
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -43,9 +43,11 @@ data class Theater(
     val vicinity: String,
     val geometry: Geometry
 )
+
 data class Geometry(
     val location: Location
 )
+
 data class Location(
     val lat: Double,
     val lng: Double
@@ -54,11 +56,6 @@ data class Location(
 class NearbyFragment : Fragment() {
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,23 +69,24 @@ class NearbyFragment : Fragment() {
             if (it != null) {
                 // get list of movie theaters
                 val executor = Executors.newSingleThreadExecutor()
-                executor.execute{
-                    try{
+                executor.execute {
+                    try {
                         // get api key from config.properties
-                        val resources= resources
+                        val resources = resources
                         val inputStream: InputStream = resources.openRawResource(R.raw.config)
                         val properties = Properties()
                         properties.load(inputStream)
 
                         val apiKey = properties.getProperty("GOOGLE_MAPS_API_KEY")
-                        val str = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=cinema&location=${it.latitude},${it.longitude}&radius=5000&key=${apiKey}"
+                        val str =
+                            "https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=cinema&location=${it.latitude},${it.longitude}&radius=5000&key=${apiKey}"
                         val connection = URL(str).openConnection() as HttpURLConnection
                         connection.requestMethod = "GET"
                         connection.doOutput = true
                         connection.connectTimeout = 5000
                         connection.readTimeout = 5000
                         val responseCode = connection.responseCode
-                        if(responseCode == HttpURLConnection.HTTP_OK) {
+                        if (responseCode == HttpURLConnection.HTTP_OK) {
                             val br = BufferedReader(InputStreamReader(connection.inputStream))
                             var wholeResponse = ""
                             var line = br.readLine()
@@ -102,8 +100,7 @@ class NearbyFragment : Fragment() {
                         } else {
                             Log.d(TAG, "Error: $responseCode")
                         }
-                    }
-                    catch(e: Exception){
+                    } catch (e: Exception) {
                         Log.d(TAG, "Error: $e")
                     }
                 }
@@ -112,10 +109,15 @@ class NearbyFragment : Fragment() {
             }
         }
         // unused movie icon
-        val supportMapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
+        val supportMapFragment =
+            childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
         supportMapFragment.getMapAsync {
             // center map on current location and add markers for each cinema
-            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 it.isMyLocationEnabled = true
                 fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                     if (location != null) {
@@ -123,13 +125,16 @@ class NearbyFragment : Fragment() {
                         val latLng = LatLng(location.latitude, location.longitude)
                         it.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14f))
                         Log.d(TAG, "Theaters: $theaters")
-                        theaters.results.forEach{theater ->
-                            val theaterLatLng = LatLng(theater.geometry.location.lat, theater.geometry.location.lng)
-                            val marker = it.addMarker(MarkerOptions().position(theaterLatLng).title(theater.name).snippet(theater.vicinity))
+                        theaters.results.forEach { theater ->
+                            val theaterLatLng =
+                                LatLng(theater.geometry.location.lat, theater.geometry.location.lng)
+                            val marker = it.addMarker(
+                                MarkerOptions().position(theaterLatLng).title(theater.name)
+                                    .snippet(theater.vicinity)
+                            )
                             marker?.tag = theater
                         }
-                    }
-                    else {
+                    } else {
                         val text = "Location is probably disabled"
                         val duration = Toast.LENGTH_SHORT
                         val toast = Toast.makeText(context, text, duration)
@@ -137,7 +142,11 @@ class NearbyFragment : Fragment() {
                     }
                 }
             } else {
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    1
+                )
             }
         }
 
@@ -145,7 +154,4 @@ class NearbyFragment : Fragment() {
         return view
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
 }

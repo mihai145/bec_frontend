@@ -2,13 +2,13 @@ package com.example.bec_client.fragment
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.bec_client.R
@@ -32,6 +32,7 @@ class TrendingFragment : Fragment() {
         super.onCreate(savedInstanceState)
         trendingViewModel = ViewModelProvider(this).get(TrendingViewModel::class.java)
     }
+
     private fun doTheTrending(genreId: Int) {
         recyclerAdapter.resetAdapter()
         trendingViewModel.getTrending(genreId)
@@ -44,13 +45,15 @@ class TrendingFragment : Fragment() {
             }
         })
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_trending, container, false)
-        val recyclerView = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.trendingRecyclerView)
+        val recyclerView =
+            view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.trendingRecyclerView)
         recyclerAdapter = RecyclerAdapter()
         recyclerView.adapter = recyclerAdapter
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
@@ -68,13 +71,21 @@ class TrendingFragment : Fragment() {
 
                 Log.d("Debug", genreList.toString())
                 val genreSpinner = view.findViewById<Spinner>(R.id.genreSpinner)
-                val genreAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, genreList.map { x -> x.name })
+                val genreAdapter = ArrayAdapter<String>(
+                    requireContext(),
+                    android.R.layout.simple_spinner_item,
+                    genreList.map { x -> x.name })
 
                 genreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 genreSpinner.adapter = genreAdapter
 
                 genreSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>,
+                        view: View,
+                        position: Int,
+                        id: Long
+                    ) {
 
                         val genreId = genreDict[parent.getItemAtPosition(position).toString()]
                         doTheTrending(genreId!!.toInt())
@@ -85,7 +96,7 @@ class TrendingFragment : Fragment() {
                     }
                 }
 
-            }else{
+            } else {
                 Log.d("DEBUG: ", "a crapat")
             }
         })

@@ -7,46 +7,55 @@ import androidx.lifecycle.MutableLiveData
 import com.example.restapi.home.data.model.response.*
 import com.example.restapi.home.data.repository.SearchRepository
 
-class SearchViewModel(application: Application) : AndroidViewModel(application){
+class SearchViewModel(application: Application) : AndroidViewModel(application) {
 
-    private var searchRepository: SearchRepository?=null
-    var searchedMoviesLiveData: LiveData<MovieResponseModel>?=null
-    var searchedActorsLiveData: LiveData<ActorResponseModel>?=null
-    var searchedUsersLiveData: LiveData<UserSearchModel>?=null
-    var movieInfoLiveData: LiveData<MovieInfoResponseModel>?=null
-    var actorInfoLiveData: LiveData<ActorInfoResponseModel>?=null
-    var userFollowLiveData: LiveData<UserFollowResponseModel>?=null
-    var followPostResponse: SimpleResponseModel?=null
-    var unfollowPostResponse: SimpleResponseModel?=null
-    init{
+    private var searchRepository: SearchRepository? = null
+    var searchedMoviesLiveData: LiveData<MovieResponseModel>? = null
+    var searchedActorsLiveData: LiveData<ActorResponseModel>? = null
+    var searchedUsersLiveData: LiveData<UserSearchModel>? = null
+    var movieInfoLiveData: LiveData<MovieInfoResponseModel>? = null
+    var actorInfoLiveData: LiveData<ActorInfoResponseModel>? = null
+    var userFollowLiveData: LiveData<UserFollowResponseModel>? = null
+    var postInfoLiveData: LiveData<PostInfoResponseModel>? = null
+    var postsLiveData: LiveData<PostsResponseModel>? = null
+
+    init {
         searchRepository = SearchRepository()
         searchedMoviesLiveData = MutableLiveData()
         searchedActorsLiveData = MutableLiveData()
         movieInfoLiveData = MutableLiveData()
+        postsLiveData = MutableLiveData()
     }
 
     fun searchUser(nickname: String) {
         searchedUsersLiveData = searchRepository?.searchByUser(nickname)
     }
-    fun searchMoviesByName(movieName: String){
+
+    fun searchMoviesByName(movieName: String) {
         searchedMoviesLiveData = searchRepository?.searchByMovieName(movieName)
     }
-    fun searchActorByName(actorName: String){
+
+    fun searchActorByName(actorName: String) {
         searchedActorsLiveData = searchRepository?.searchByActorName(actorName)
     }
-    fun movieInfo(movieId: Long){
+
+    fun movieInfo(movieId: Long) {
         movieInfoLiveData = searchRepository?.movieInfo(movieId)
     }
-    fun actorInfo(actorId: Long){
+
+    fun actorInfo(actorId: Long) {
         actorInfoLiveData = searchRepository?.actorInfo(actorId)
     }
+
     fun userFollowInfo(followerId: Long, followeeId: Long) {
         userFollowLiveData = searchRepository?.userFollowInfo(followerId, followeeId)
     }
-//    fun follow(followerId: Long, followeeId: Long) {
-//        followPostResponse = searchRepository?.follow(followerId, followeeId)
-//    }
-//    fun unfollow(followerId: Long, followeeId: Long) {
-//        unfollowPostResponse = searchRepository?.unfollow(followerId, followeeId)
-//    }
+
+    fun postInfo(postId: Long) {
+        postInfoLiveData = searchRepository?.postInfo(postId)
+    }
+
+    fun getPosts() {
+        postsLiveData = searchRepository?.getPosts()
+    }
 }

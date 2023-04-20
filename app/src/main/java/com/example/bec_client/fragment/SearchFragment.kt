@@ -23,7 +23,7 @@ import com.example.restapi.home.viewmodel.SearchViewModel
  * create an instance of this fragment.
  */
 class SearchFragment : Fragment() {
-    private lateinit var searchViewModel:SearchViewModel
+    private lateinit var searchViewModel: SearchViewModel
     private lateinit var recyclerAdapter: RecyclerAdapter
 
     private fun search(query: String) {
@@ -34,53 +34,56 @@ class SearchFragment : Fragment() {
 
 
         searchViewModel.searchedMoviesLiveData?.observe(this, Observer {
-            if (it!=null){
+            if (it != null) {
                 recyclerAdapter.submitList(it.results.map { x -> CardModel(x) })
-                Log.d("Debug",it.toString())
-            }else{
+                Log.d("Debug", it.toString())
+            } else {
                 Log.d("DEBUG: ", "a crapat")
             }
         })
         searchViewModel.searchedActorsLiveData?.observe(this, Observer {
-            if (it!=null){
+            if (it != null) {
                 recyclerAdapter.submitList(it.results.map { x -> CardModel(x) })
-                Log.d("Debug",it.toString())
-            }else{
+                Log.d("Debug", it.toString())
+            } else {
                 Log.d("DEBUG: ", "a crapat")
             }
         })
         searchViewModel.searchedUsersLiveData?.observe(this, Observer {
-            if (it!=null){
+            if (it != null) {
                 recyclerAdapter.submitList(it.results.map { x -> CardModel(x) })
-                Log.d("Debug",it.toString())
-            }else{
+                Log.d("Debug", it.toString())
+            } else {
                 Log.d("DEBUG: ", "a crapat")
             }
         })
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val mView : View = inflater.inflate(R.layout.fragment_search, container,false)
-        val searchView : SearchView = mView.findViewById(R.id.SearchView);
-        val recyclerView : RecyclerView = mView.findViewById(R.id.recycler_view)
+        val mView: View = inflater.inflate(R.layout.fragment_search, container, false)
+        val searchView: SearchView = mView.findViewById(R.id.SearchView)
+        val recyclerView: RecyclerView = mView.findViewById(R.id.recycler_view)
         recyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL ,false)
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             recyclerAdapter = RecyclerAdapter()
             adapter = recyclerAdapter
         }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if(query == null)
-                    return false;
+                if (query == null)
+                    return false
                 Log.d("DEBUG: ", query)
-                search(query);
+                search(query)
                 return true
             }
 
