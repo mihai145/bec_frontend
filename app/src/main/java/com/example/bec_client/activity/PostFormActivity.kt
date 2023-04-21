@@ -95,9 +95,6 @@ class PostFormActivity : AppCompatActivity() {
                             if (response.code() == 202 && res != null && res.ok) {
                                 Toast.makeText(applicationContext, "Added", Toast.LENGTH_SHORT)
                                     .show()
-                                val intent = Intent(applicationContext, MovieActivity::class.java)
-                                intent.putExtra("id", movieId)
-//                                startActivity(intent)
                                 finish()
 
 
@@ -141,8 +138,6 @@ class PostFormActivity : AppCompatActivity() {
                             if (response.code() == 202 && res != null && res.ok == true) {
                                 Toast.makeText(applicationContext, "Edited", Toast.LENGTH_SHORT)
                                     .show()
-                                val intent = Intent(applicationContext, MovieActivity::class.java)
-                                intent.putExtra("id", movieId)
                                 finish()
                             } else {
                                 Toast.makeText(
