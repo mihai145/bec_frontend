@@ -41,6 +41,14 @@ class PostActivity : AppCompatActivity() {
         apiInterface = ApiClient.getApiClient().create(ApiInterface::class.java)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(pressed) {
+            pressed = false
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
@@ -104,7 +112,8 @@ class PostActivity : AppCompatActivity() {
                             Toast.makeText(applicationContext, "Deleted", Toast.LENGTH_SHORT).show()
                             val intent = Intent(applicationContext, MovieActivity::class.java)
                             intent.putExtra("id", post.movieId)
-                            startActivity(intent)
+//                            startActivity(intent)
+                            finish()
                         } else {
                             Toast.makeText(
                                 applicationContext,

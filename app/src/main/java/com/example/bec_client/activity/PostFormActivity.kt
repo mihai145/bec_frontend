@@ -92,12 +92,15 @@ class PostFormActivity : AppCompatActivity() {
                             response: Response<SimpleResponseModel>
                         ) {
                             val res = response.body()
-                            if (response.code() == 202 && res != null && res.ok == true) {
+                            if (response.code() == 202 && res != null && res.ok) {
                                 Toast.makeText(applicationContext, "Added", Toast.LENGTH_SHORT)
                                     .show()
                                 val intent = Intent(applicationContext, MovieActivity::class.java)
                                 intent.putExtra("id", movieId)
-                                startActivity(intent)
+//                                startActivity(intent)
+                                finish()
+
+
                             } else {
                                 Toast.makeText(
                                     applicationContext,
@@ -140,7 +143,7 @@ class PostFormActivity : AppCompatActivity() {
                                     .show()
                                 val intent = Intent(applicationContext, MovieActivity::class.java)
                                 intent.putExtra("id", movieId)
-                                startActivity(intent)
+                                finish()
                             } else {
                                 Toast.makeText(
                                     applicationContext,
