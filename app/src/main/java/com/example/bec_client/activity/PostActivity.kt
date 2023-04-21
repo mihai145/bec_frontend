@@ -45,8 +45,11 @@ class PostActivity : AppCompatActivity() {
         super.onResume()
         if(pressed) {
             pressed = false
+            finish();
+            overridePendingTransition(0, 0);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

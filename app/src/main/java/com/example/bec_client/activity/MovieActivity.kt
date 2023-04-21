@@ -46,11 +46,6 @@ class MovieActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if(pressed) {
-            Toast.makeText(
-                applicationContext,
-                "onResume",
-                Toast.LENGTH_SHORT
-            ).show()
             pressed = false
 
             val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
