@@ -18,6 +18,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     var userFollowLiveData: LiveData<UserFollowResponseModel>? = null
     var postInfoLiveData: LiveData<PostInfoResponseModel>? = null
     var postsLiveData: LiveData<PostsResponseModel>? = null
+    var commentsLiveData: LiveData<CommentsResponseModel>? = null
 
     init {
         searchRepository = SearchRepository()
@@ -57,5 +58,9 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     fun getPosts() {
         postsLiveData = searchRepository?.getPosts()
+    }
+
+    fun getComments(postId: Long) {
+        commentsLiveData = searchRepository?.getComments(postId)
     }
 }

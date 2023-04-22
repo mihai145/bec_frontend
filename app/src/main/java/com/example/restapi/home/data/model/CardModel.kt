@@ -6,6 +6,8 @@ class CardModel {
     var imagePath:String?=null
     var id:Long?=0
     var type:Int?=0
+    var postId:Long?=0
+    var userId:Long?=0
 
     constructor(movie:MovieModel){
         imagePath = movie.posterPath
@@ -36,5 +38,14 @@ class CardModel {
         this.body = post.content
         this.id = post.id
         this.type = 4
+    }
+
+    constructor(comment: CommentModel) {
+        title = comment.authorNickname
+        body = comment.content
+        id = comment.id
+        type = 5
+        postId = comment.postId
+        this.userId = comment.authorId
     }
 }

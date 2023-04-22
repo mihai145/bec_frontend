@@ -10,10 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.bec_client.R
-import com.example.bec_client.activity.ActorActivity
-import com.example.bec_client.activity.MovieActivity
-import com.example.bec_client.activity.PostActivity
-import com.example.bec_client.activity.UserActivity
+import com.example.bec_client.activity.*
 import com.example.restapi.home.data.model.CardModel
 
 
@@ -90,6 +87,7 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     2 -> intent = Intent(itemView.context, ActorActivity::class.java)
                     3 -> intent = Intent(itemView.context, UserActivity::class.java)
                     4 -> intent = Intent(itemView.context, PostActivity::class.java)
+                    5 -> intent = Intent(itemView.context, CommentFormActivity::class.java)
                     else -> {
                         throw Exception("BAD CARD TYPE")
                     }
@@ -97,6 +95,12 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 intent.putExtra("id", card.id)
                 if (card.type == 3) {
                     intent.putExtra("nickname", card.title)
+                }
+                if (card.type == 5) {
+                    intent.putExtra("newOrEdit", 1L)
+                    intent.putExtra("content", card.body)
+                    intent.putExtra("postId", card.postId)
+                    intent.putExtra("userId", card.userId)
                 }
                 itemView.context.startActivity(intent)
             }

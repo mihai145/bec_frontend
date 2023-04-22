@@ -66,6 +66,36 @@ interface ApiInterface {
         @Body submitPost: EditPostModel
     ): Call<SimpleResponseModel>
 
+    @POST("deleteComment")
+    fun deleteComment(
+        @Header("Bearer") token: String,
+        @Body postInfo: CommentInfoModel
+    ): Call<SimpleResponseModel>
+
+    @POST("comments")
+    fun comments(
+        @Header("Bearer") token: String,
+        @Body postInfo: PostCommentsModel
+    ): Call<CommentsResponseModel>
+
+    @POST("getComment")
+    fun getComment(
+        @Header("Bearer") token: String,
+        @Body postInfo: CommentInfoModel
+    ): Call<CommentInfoResponseModel>
+
+    @POST("comment")
+    fun submitComment(
+        @Header("Bearer") token: String,
+        @Body submitComment: SubmitCommentModel
+    ): Call<SimpleResponseModel>
+
+    @POST("editComment")
+    fun editComment(
+        @Header("Bearer") token: String,
+        @Body submitPost: EditCommentModel
+    ): Call<SimpleResponseModel>
+
     @POST("deletePost")
     fun deletePost(
         @Header("Bearer") token: String,
