@@ -16,7 +16,7 @@
  https://trello.com/invite/b/j2L9dYsv/ATTIf0a5d39020a8d9751abf85adb7a40ad251B5AF4F/bec-film-app
 
 #### Diagrama
- ...
+ https://github.com/mihai145/bec_frontend/blob/main/UML.jpeg
 
 #### Demo
  ...
