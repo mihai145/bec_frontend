@@ -26,6 +26,7 @@ class PostFormActivity : AppCompatActivity() {
     private var content: String = ""
 
     private lateinit var newPostTitle: TextView
+    private lateinit var movieNameTextView: TextView
     private lateinit var titleEditText: EditText
     private lateinit var contentEditText: EditText
     private lateinit var submitButton: Button
@@ -60,9 +61,11 @@ class PostFormActivity : AppCompatActivity() {
         titleEditText = findViewById(R.id.titleEditText)
         contentEditText = findViewById(R.id.contentEditText)
         submitButton = findViewById(R.id.submitButton)
+        movieNameTextView = findViewById(R.id.movieNameTextView)
 
         titleEditText.setText(title)
         contentEditText.setText(content)
+        if (movieName != null) movieNameTextView.text = movieName
 
         // get user id from id token...
         val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
@@ -89,12 +92,12 @@ class PostFormActivity : AppCompatActivity() {
                             response: Response<SimpleResponseModel>
                         ) {
                             val res = response.body()
-                            if (response.code() == 202 && res != null && res.ok == true) {
+                            if (response.code() == 202 && res != null && res.ok) {
                                 Toast.makeText(applicationContext, "Added", Toast.LENGTH_SHORT)
                                     .show()
-                                val intent = Intent(applicationContext, MovieActivity::class.java)
-                                intent.putExtra("id", movieId)
-                                startActivity(intent)
+                                finish()
+
+
                             } else {
                                 Toast.makeText(
                                     applicationContext,
@@ -135,9 +138,7 @@ class PostFormActivity : AppCompatActivity() {
                             if (response.code() == 202 && res != null && res.ok == true) {
                                 Toast.makeText(applicationContext, "Edited", Toast.LENGTH_SHORT)
                                     .show()
-                                val intent = Intent(applicationContext, MovieActivity::class.java)
-                                intent.putExtra("id", movieId)
-                                startActivity(intent)
+                                finish()
                             } else {
                                 Toast.makeText(
                                     applicationContext,
