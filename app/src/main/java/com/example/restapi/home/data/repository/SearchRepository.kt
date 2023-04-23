@@ -264,4 +264,29 @@ class SearchRepository {
 
         return data
     }
+
+    fun getComments(postId: Long): LiveData<CommentsResponseModel> {
+        val data = MutableLiveData<CommentsResponseModel>()
+        val requestModel = PostCommentsModel(postId)
+        apiInterface?.comments(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+            ?.enqueue(object : Callback<CommentsResponseModel> {
+                override fun onFailure(call: Call<CommentsResponseModel>, t: Throwable) {
+                    data.value = null
+                }
+
+                override fun onResponse(
+                    call: Call<CommentsResponseModel>,
+                    response: Response<CommentsResponseModel>
+                ) {
+                    val res = response.body()
+                    if (response.code() == 202 && res != null && res.ok == true) {
+                        data.value = res
+                    } else {
+                        data.value = null
+                    }
+                }
+            })
+
+        return data
+    }
 }

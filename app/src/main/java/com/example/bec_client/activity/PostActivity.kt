@@ -3,20 +3,30 @@ package com.example.bec_client.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
+import com.example.bec_client.adapter.RecyclerAdapter
+import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.data.model.PostModel
 import com.example.restapi.home.data.model.request.PostInfoModel
 import com.example.restapi.home.data.model.response.SimpleResponseModel
 import com.example.restapi.home.viewmodel.SearchViewModel
 import com.example.restapi.network.ApiClient
 import com.example.restapi.network.ApiInterface
+import com.google.android.gms.common.api.internal.LifecycleActivity
 import retrofit2.Call
 import retrofit2.Response
 
@@ -24,6 +34,7 @@ class PostActivity : AppCompatActivity() {
     private var id: Long = 0
 
     private lateinit var searchViewModel: SearchViewModel
+    private lateinit var recyclerAdapter: RecyclerAdapter
     private lateinit var post: PostModel
 
     private lateinit var postTitle: TextView
@@ -32,6 +43,7 @@ class PostActivity : AppCompatActivity() {
     private lateinit var postContent: TextView
 
     private lateinit var editButton: Button
+    private lateinit var addComment: Button
     private lateinit var deleteButton: Button
     private var pressed: Boolean = false
 
@@ -88,6 +100,7 @@ class PostActivity : AppCompatActivity() {
         postContent = findViewById(R.id.postContent)
 
         editButton = findViewById(R.id.editPost)
+        addComment = findViewById(R.id.addComment)
         deleteButton = findViewById(R.id.deletePost)
 
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
@@ -109,6 +122,18 @@ class PostActivity : AppCompatActivity() {
                 intent.putExtra("movieName", post.movieName)
                 intent.putExtra("title", post.title)
                 intent.putExtra("content", post.content)
+                startActivity(intent)
+            }
+        }
+
+        addComment.setOnClickListener {
+            if (!pressed) {
+                pressed = true
+                val intent = Intent(this, CommentFormActivity::class.java)
+                intent.putExtra("newOrEdit", 0L)
+                intent.putExtra("content", "Content")
+                intent.putExtra("postId", post.id)
+                intent.putExtra("userId", MainActivity.userId)
                 startActivity(intent)
             }
         }
@@ -177,5 +202,39 @@ class PostActivity : AppCompatActivity() {
                 Log.d("DEBUG: ", "a crapat")
             }
         })
+
+        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(
+                rootView.context
+                ,LinearLayoutManager.VERTICAL, false
+            )
+            recyclerAdapter = RecyclerAdapter()
+            adapter = recyclerAdapter
+        }
+
+        feedData(id)
+        searchViewModel.commentsLiveData?.observe(this, Observer {
+            if (it != null) {
+                recyclerAdapter.submitList(it.comments.map { x -> CardModel(x) })
+                Log.d("DebugPosts", it.toString())
+            } else {
+                Log.d("DEBUG POSTS:", "a crapat")
+            }
+        })
+    }
+
+    override fun onResume() {
+        id = intent.getLongExtra("id", -1)
+        feedData(id)
+        super.onResume()
+    }
+
+    fun feedData(id: Long) {
+        // populate recycler
+        if (MainActivity.cachedCredentials != null) {
+            recyclerAdapter.resetAdapter()
+            searchViewModel.getComments(id)
+        }
     }
 }
