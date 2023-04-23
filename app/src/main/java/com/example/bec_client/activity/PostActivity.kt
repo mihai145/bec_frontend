@@ -41,6 +41,38 @@ class PostActivity : AppCompatActivity() {
         apiInterface = ApiClient.getApiClient().create(ApiInterface::class.java)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(pressed) {
+            pressed = false
+            searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
+            searchViewModel.postInfo(id)
+            searchViewModel.postInfoLiveData?.observe(this, Observer {
+                if (it != null) {
+                    post = it.post
+                    if (post != null) {
+                        val title = post.title
+                        val author = post.authorNickname
+                        postTitle.text = "Title: $title"
+                        authorName.text = "Author: $author"
+                        postContent.text = post.content
+                        if (post.movieName != null) {
+                            val mvName = post.movieName
+                            movieName.text = "Movie: $mvName"
+                        } else {
+                            movieName.text = "Normal Post, does not reffer to any movie"
+                        }
+                    } else {
+                        Toast.makeText(this, "Post data not available", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                } else {
+                    Log.d("DEBUG: ", "a crapat")
+                }
+            })
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
@@ -102,9 +134,7 @@ class PostActivity : AppCompatActivity() {
                         val res = response.body()
                         if (response.code() == 202 && res != null && res.ok == true) {
                             Toast.makeText(applicationContext, "Deleted", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(applicationContext, MovieActivity::class.java)
-                            intent.putExtra("id", post.movieId)
-                            startActivity(intent)
+                            finish()
                         } else {
                             Toast.makeText(
                                 applicationContext,

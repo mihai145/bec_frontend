@@ -40,24 +40,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val mView: View = inflater.inflate(R.layout.fragment_home, container, false)
-        val btnApi: Button = mView.findViewById(R.id.btnApiCall)
-
-        btnApi.setOnClickListener {
-            val executor = Executors.newSingleThreadExecutor()
-            var res: String = "Eroare"
-            executor.execute {
-                try {
-                    res = URL("https://teambec.live").readText()
-                    Log.d("DEBUG: ", res)
-                } catch (e: java.lang.Exception) {
-                    Log.d("DEBUG: ", e.toString())
-                }
-            }
-            executor.shutdown()
-            executor.awaitTermination(1, TimeUnit.SECONDS)
-            val textView = mView.findViewById<TextView>(R.id.TextViewHome)
-            textView.text = res
-        }
 
         val recyclerView: RecyclerView = mView.findViewById(R.id.recycler_view)
         recyclerView.apply {

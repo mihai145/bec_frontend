@@ -34,12 +34,51 @@ class MovieActivity : AppCompatActivity() {
     private lateinit var movieOverview: TextView
 
     private lateinit var reviewButton: Button
+    private var pressed: Boolean = false
 
     private var apiInterface: ApiInterface? = null
     private var postId: Long = 0
 
     init {
         apiInterface = ApiClient.getApiClient().create(ApiInterface::class.java)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(pressed) {
+            pressed = false
+
+            val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
+
+            if (userId != -1) {
+                val requestModel = DidReviewModel(userId.toLong(), id)
+                apiInterface?.didIReview(
+                    MainActivity.cachedCredentials?.idToken.toString(),
+                    requestModel
+                )
+                    ?.enqueue(object : retrofit2.Callback<DidReviewResponseModel> {
+                        override fun onResponse(
+                            call: Call<DidReviewResponseModel>,
+                            response: Response<DidReviewResponseModel>
+                        ) {
+                            val res = response.body()
+                            if (response.code() == 202 && res != null && res.ok) {
+                                postId = res.postId.toLong()
+                                if (res.reviewed) reviewButton.text = "SEE REVIEW"
+                                else reviewButton.text = "WRITE REVIEW"
+                            } else {
+                                Log.d("DEBUG:", "A crapat")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<DidReviewResponseModel>, t: Throwable) {
+                            Log.d("DEBUG:", "A crapat")
+                        }
+                    })
+            } else {
+                reviewButton.text = "WRITE REVIEW"
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,6 +130,7 @@ class MovieActivity : AppCompatActivity() {
 
         reviewButton = findViewById(R.id.review_button)
         reviewButton.setOnClickListener {
+            pressed = true
             if (reviewButton.text != "LOADING") {
                 if (MainActivity.cachedCredentials == null) {
                     Toast.makeText(this, "You need to be logged in to do that", Toast.LENGTH_SHORT)
