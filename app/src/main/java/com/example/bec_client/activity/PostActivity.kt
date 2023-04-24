@@ -54,6 +54,8 @@ class PostActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        id = intent.getLongExtra("id", -1)
+        feedData(id)
         super.onResume()
         if(pressed) {
             pressed = false
@@ -224,13 +226,7 @@ class PostActivity : AppCompatActivity() {
         })
     }
 
-    override fun onResume() {
-        id = intent.getLongExtra("id", -1)
-        feedData(id)
-        super.onResume()
-    }
-
-    fun feedData(id: Long) {
+    private fun feedData(id: Long) {
         // populate recycler
         if (MainActivity.cachedCredentials != null) {
             recyclerAdapter.resetAdapter()
