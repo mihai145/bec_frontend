@@ -89,9 +89,7 @@ class CommentFormActivity : AppCompatActivity() {
                             val res = response.body()
                             if (response.code() == 202 && res != null && res.ok == true) {
                                 Toast.makeText(applicationContext, "Deleted", Toast.LENGTH_SHORT).show()
-                                val intent = Intent(applicationContext, PostActivity::class.java)
-                                intent.putExtra("id", postId)
-                                startActivity(intent)
+                                finish()
                             } else {
                                 Toast.makeText(
                                     applicationContext,
@@ -139,12 +137,10 @@ class CommentFormActivity : AppCompatActivity() {
                             response: Response<SimpleResponseModel>
                         ) {
                             val res = response.body()
-                            if (response.code() == 202 && res != null && res.ok == true) {
+                            if (response.code() == 202 && res != null && res.ok) {
                                 Toast.makeText(applicationContext, "Added", Toast.LENGTH_SHORT)
                                     .show()
-                                val intent = Intent(applicationContext, PostActivity::class.java)
-                                intent.putExtra("id", postId)
-                                startActivity(intent)
+                                finish()
                             } else {
                                 Toast.makeText(
                                     applicationContext,
@@ -181,12 +177,10 @@ class CommentFormActivity : AppCompatActivity() {
                             response: Response<SimpleResponseModel>
                         ) {
                             val res = response.body()
-                            if (response.code() == 202 && res != null && res.ok == true) {
+                            if (response.code() == 202 && res != null && res.ok) {
                                 Toast.makeText(applicationContext, "Edited", Toast.LENGTH_SHORT)
                                     .show()
-                                val intent = Intent(applicationContext, PostActivity::class.java)
-                                intent.putExtra("id", postId)
-                                startActivity(intent)
+                                finish()
                             } else {
                                 Toast.makeText(
                                     applicationContext,
