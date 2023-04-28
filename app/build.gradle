@@ -79,4 +79,7 @@ dependencies {
 
     // PostgreSQL connection
     implementation 'org.postgresql:postgresql:42.2.9'
+
+    // JWT
+    implementation 'com.auth0:java-jwt:4.4.0'
 }

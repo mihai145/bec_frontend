@@ -110,4 +110,8 @@ interface ApiInterface {
 
     @POST("trending")
     fun getTrending(@Body genreId: SearchByGenreIdModel): Call<TrendingResponseModel>
+
+    @POST("deleteUser")
+    fun deleteUser(@Header("Bearer") token: String,
+                   @Body deletePost: UserDeleteModel): Call<SimpleResponseModel>
 }
