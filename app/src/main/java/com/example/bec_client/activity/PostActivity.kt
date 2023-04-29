@@ -54,6 +54,8 @@ class PostActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        id = intent.getLongExtra("id", -1)
+        feedData(id)
         super.onResume()
         if(pressed) {
             pressed = false
@@ -222,12 +224,6 @@ class PostActivity : AppCompatActivity() {
                 Log.d("DEBUG POSTS:", "a crapat")
             }
         })
-    }
-
-    override fun onResume() {
-        id = intent.getLongExtra("id", -1)
-        feedData(id)
-        super.onResume()
     }
 
     fun feedData(id: Long) {
