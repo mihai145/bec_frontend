@@ -1,6 +1,7 @@
 package com.example.restapi.home.data.repository
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.bec_client.MainActivity
@@ -287,6 +288,108 @@ class SearchRepository {
                 }
             })
 
+        return data
+    }
+
+    fun getLikesPost(postId: Long): LiveData<Int> {
+        val data = MutableLiveData<Int>()
+        val requestModel = PostInfoModel(postId)
+        apiInterface?.getLikesPost(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+            ?.enqueue(object : Callback<LikeResponseModel> {
+                override fun onFailure(call: Call<LikeResponseModel>, t: Throwable) {
+                    data.value = null
+                }
+
+                override fun onResponse(
+                    call: Call<LikeResponseModel>,
+                    response: Response<LikeResponseModel>
+                ) {
+                    val res = response.body()
+                    if (response.code() == 202 && res != null && res.ok == true) {
+                        data.value = res.results!!
+                    } else {
+                        data.value = null
+                    }
+                }
+            })
+
+        return data
+    }
+
+    fun wasLikedPost(postId: Long, userId: Long): LiveData<Int> {
+        val data = MutableLiveData<Int>()
+        val requestModel = PostLikedModel(postId, userId)
+        apiInterface?.wasLikedPost(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+            ?.enqueue(object : Callback<LikeResponseModel> {
+                override fun onFailure(call: Call<LikeResponseModel>, t: Throwable) {
+                    data.value = null
+                }
+
+                override fun onResponse(
+                    call: Call<LikeResponseModel>,
+                    response: Response<LikeResponseModel>
+                ) {
+                    val res = response.body()
+                    Log.d("OnResponse", res?.results.toString() + " " + res?.ok.toString())
+                    if (response.code() == 202 && res != null && res.ok == true) {
+                        data.value = res.results!!
+                        Log.d("data", data.value.toString())
+                    } else {
+                        data.value = null
+                    }
+                }
+            })
+        return data
+    }
+
+    fun getLikesComment(commentId: Long): LiveData<Int> {
+        val data = MutableLiveData<Int>()
+        val requestModel = CommentInfoModel(commentId)
+        apiInterface?.getLikesComment(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+            ?.enqueue(object : Callback<LikeResponseModel> {
+                override fun onFailure(call: Call<LikeResponseModel>, t: Throwable) {
+                    data.value = null
+                }
+
+                override fun onResponse(
+                    call: Call<LikeResponseModel>,
+                    response: Response<LikeResponseModel>
+                ) {
+                    val res = response.body()
+                    if (response.code() == 202 && res != null && res.ok == true) {
+                        data.value = res.results!!
+                    } else {
+                        data.value = null
+                    }
+                }
+            })
+
+        return data
+    }
+
+    fun wasLikedComment(commentId: Long, userId: Long): LiveData<Int> {
+        val data = MutableLiveData<Int>()
+        val requestModel = CommentLikedModel(commentId, userId)
+        apiInterface?.wasLikedComment(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+            ?.enqueue(object : Callback<LikeResponseModel> {
+                override fun onFailure(call: Call<LikeResponseModel>, t: Throwable) {
+                    data.value = null
+                }
+
+                override fun onResponse(
+                    call: Call<LikeResponseModel>,
+                    response: Response<LikeResponseModel>
+                ) {
+                    val res = response.body()
+                    Log.d("OnResponse", res?.results.toString() + " " + res?.ok.toString())
+                    if (response.code() == 202 && res != null && res.ok == true) {
+                        data.value = res.results!!
+                        Log.d("data", data.value.toString())
+                    } else {
+                        data.value = null
+                    }
+                }
+            })
         return data
     }
 }

@@ -19,6 +19,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     var postInfoLiveData: LiveData<PostInfoResponseModel>? = null
     var postsLiveData: LiveData<PostsResponseModel>? = null
     var commentsLiveData: LiveData<CommentsResponseModel>? = null
+    var likes: LiveData<Int>? = null
+    var wasLiked: LiveData<Int>? = null
 
     init {
         searchRepository = SearchRepository()
@@ -62,5 +64,21 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     fun getComments(postId: Long) {
         commentsLiveData = searchRepository?.getComments(postId)
+    }
+
+    fun wasLikedPost(postId: Long, userId: Long) {
+        wasLiked = searchRepository?.wasLikedPost(postId, userId)
+    }
+
+    fun getLikesPost(postId: Long) {
+        likes = searchRepository?.getLikesPost(postId)
+    }
+
+    fun wasLikedComment(commentId: Long, userId: Long) {
+        wasLiked = searchRepository?.wasLikedComment(commentId, userId)
+    }
+
+    fun getLikesComment(commentId: Long) {
+        likes = searchRepository?.getLikesComment(commentId)
     }
 }
