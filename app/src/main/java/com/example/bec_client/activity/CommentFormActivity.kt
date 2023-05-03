@@ -1,20 +1,20 @@
 package com.example.bec_client.activity
 
-import android.content.Intent
-import android.util.Log
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.util.Log
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
 import com.example.restapi.home.data.model.request.*
 import com.example.restapi.home.data.model.response.SimpleResponseModel
+import com.example.restapi.home.viewmodel.SearchViewModel
 import com.example.restapi.network.ApiClient
 import com.example.restapi.network.ApiInterface
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 class CommentFormActivity : AppCompatActivity() {
@@ -24,10 +24,13 @@ class CommentFormActivity : AppCompatActivity() {
     private var newOrEdit: Long = 0
     private var content: String = ""
 
+    private lateinit var searchViewModel: SearchViewModel
     private lateinit var newCommentTitle: TextView
     private lateinit var contentEditText: EditText
+    private lateinit var likesCount: TextView
     private lateinit var submitButton: Button
     private lateinit var deleteButton: Button
+    private lateinit var likeButton: ToggleButton
     private var pressed: Boolean = false
 
     private var apiInterface: ApiInterface? = null
@@ -44,6 +47,7 @@ class CommentFormActivity : AppCompatActivity() {
         authorId = intent.getLongExtra("userId", -1)
         commentId = intent.getLongExtra("id", -1)
 
+        searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
         newOrEdit = intent.getLongExtra("newOrEdit", -1)
         if (newOrEdit == -1L)
             throw Exception("Malformed Post Form Activity")
@@ -54,9 +58,14 @@ class CommentFormActivity : AppCompatActivity() {
         if (newOrEdit == 1L) newCommentTitle.text = "EDIT COMMENT"
 
         contentEditText = findViewById(R.id.contentEditText)
+        likesCount = findViewById(R.id.likesCount)
         submitButton = findViewById(R.id.submitButton)
         deleteButton = findViewById(R.id.deleteButton)
+        likeButton = findViewById(R.id.likeButton)
         contentEditText.setText(content)
+
+        searchViewModel.wasLikedComment(commentId, MainActivity.userId?.toLong() ?: -1L)
+        searchViewModel.getLikesComment(commentId)
 
         // get user id from id token...
         val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
@@ -203,5 +212,83 @@ class CommentFormActivity : AppCompatActivity() {
                 }
             }
         }
+        likeButton.setOnClickListener {
+            val requestModel = CommentLikedModel(commentId, MainActivity.userId?.toLong() ?: -1L)
+            if(likeButton.isChecked) {
+                apiInterface?.likeComment(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+                    ?.enqueue(object : Callback<SimpleResponseModel> {
+                        override fun onResponse(
+                            call: Call<SimpleResponseModel>,
+                            response: Response<SimpleResponseModel>
+                        ) {
+                            val res = response.body()
+                            if (response.code() == 202 && res != null && res.ok) {
+                                Toast.makeText(applicationContext, "Comment was liked", Toast.LENGTH_SHORT)
+                                    .show()
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Please try again",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<SimpleResponseModel>, t: Throwable) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Please try again",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
+            } else {
+                apiInterface?.deleteLikeComment(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+                    ?.enqueue(object : Callback<SimpleResponseModel> {
+                        override fun onResponse(
+                            call: Call<SimpleResponseModel>,
+                            response: Response<SimpleResponseModel>
+                        ) {
+                            val res = response.body()
+                            if (response.code() == 202 && res != null && res.ok) {
+                                Toast.makeText(applicationContext, "Like was deleted", Toast.LENGTH_SHORT)
+                                    .show()
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Please try again",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<SimpleResponseModel>, t: Throwable) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Please try again",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
+            }
+        }
+
+
+        searchViewModel.wasLiked?.observe(this, Observer {
+            Log.d("Was Liked", searchViewModel.wasLiked!!.value.toString())
+            if (it != null) {
+                if(it == 1)
+                    likeButton.isChecked = true
+                Log.d("Debug Liked", it.toString())
+            }
+        })
+
+        searchViewModel.likes?.observe(this, Observer {
+            Log.d("Likes", searchViewModel.likes!!.value.toString())
+            if (it != null) {
+                likesCount.text = "$it Likes"
+                Log.d("Debug Likes", it.toString())
+            }
+        })
     }
 }

@@ -296,25 +296,123 @@ class SearchRepository {
         apiInterface?.leaderboard(MainActivity.cachedCredentials?.idToken.toString())
             ?.enqueue(object : Callback<LeaderboardResponseModel> {
                 override fun onFailure(call: Call<LeaderboardResponseModel>, t: Throwable) {
-                    Log.d("Leaderboard", "failure")
                     data.value = null
                 }
 
                 override fun onResponse(
                     call: Call<LeaderboardResponseModel>,
                     response: Response<LeaderboardResponseModel>
-                ) {
+                )
+                {
                     val res = response.body()
                     if (response.code() == 202 && res != null && res.ok == true) {
-                        Log.d("Leaderboard", res.toString())
                         data.value = res
                     } else {
-                        Log.d("Leaderboard", "failure")
                         data.value = null
                     }
                 }
             })
 
+        return data
+    }
+
+
+    fun getLikesPost(postId: Long): LiveData<Int> {
+        val data = MutableLiveData<Int>()
+        val requestModel = PostInfoModel(postId)
+        apiInterface?.getLikesPost(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+            ?.enqueue(object : Callback<LikeResponseModel> {
+                override fun onFailure(call: Call<LikeResponseModel>, t: Throwable) {
+                    data.value = null
+                }
+
+                override fun onResponse(
+                    call: Call<LikeResponseModel>,
+                    response: Response<LikeResponseModel>
+                ) {
+                    val res = response.body()
+                    if (response.code() == 202 && res != null && res.ok == true) {
+                        data.value = res.results!!
+                    } else {
+                        data.value = null
+                    }
+                }
+            })
+
+        return data
+    }
+
+    fun wasLikedPost(postId: Long, userId: Long): LiveData<Int> {
+        val data = MutableLiveData<Int>()
+        val requestModel = PostLikedModel(postId, userId)
+        apiInterface?.wasLikedPost(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+            ?.enqueue(object : Callback<LikeResponseModel> {
+                override fun onFailure(call: Call<LikeResponseModel>, t: Throwable) {
+                    data.value = null
+                }
+
+                override fun onResponse(
+                    call: Call<LikeResponseModel>,
+                    response: Response<LikeResponseModel>
+                ) {
+                    val res = response.body()
+                    if (response.code() == 202 && res != null && res.ok == true) {
+                        data.value = res.results!!
+                    } else {
+                        data.value = null
+                    }
+                }
+            })
+        return data
+    }
+
+    fun getLikesComment(commentId: Long): LiveData<Int> {
+        val data = MutableLiveData<Int>()
+        val requestModel = CommentInfoModel(commentId)
+        apiInterface?.getLikesComment(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+            ?.enqueue(object : Callback<LikeResponseModel> {
+                override fun onFailure(call: Call<LikeResponseModel>, t: Throwable) {
+                    data.value = null
+                }
+
+                override fun onResponse(
+                    call: Call<LikeResponseModel>,
+                    response: Response<LikeResponseModel>
+                ) {
+                    val res = response.body()
+                    if (response.code() == 202 && res != null && res.ok == true) {
+                        data.value = res.results!!
+                    } else {
+                        data.value = null
+                    }
+                }
+            })
+
+        return data
+    }
+
+    fun wasLikedComment(commentId: Long, userId: Long): LiveData<Int> {
+        val data = MutableLiveData<Int>()
+        val requestModel = CommentLikedModel(commentId, userId)
+        apiInterface?.wasLikedComment(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+            ?.enqueue(object : Callback<LikeResponseModel> {
+                override fun onFailure(call: Call<LikeResponseModel>, t: Throwable) {
+                    data.value = null
+                }
+
+                override fun onResponse(
+                    call: Call<LikeResponseModel>,
+                    response: Response<LikeResponseModel>
+                ) {
+                    val res = response.body()
+                    Log.d("OnResponse", res?.results.toString() + " " + res?.ok.toString())
+                    if (response.code() == 202 && res != null && res.ok == true) {
+                        data.value = res.results!!
+                    } else {
+                        data.value = null
+                    }
+                }
+            })
         return data
     }
 }
