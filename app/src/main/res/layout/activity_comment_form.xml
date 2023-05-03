@@ -9,37 +9,67 @@
     <TextView
         android:id="@+id/newCommentTitle"
         android:text="NEW COMMENT"
-        android:textSize="20dp"
-        android:layout_width="wrap_content"
+        android:textSize="40sp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:gravity="start"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"/>
 
     <EditText
         android:id="@+id/contentEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/newCommentTitle"
-        android:hint="Content" />
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        app:layout_constraintBottom_toTopOf="@id/submitButton"
+        android:hint="Content"
+        android:text=""/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/submitButton"
         android:text="SUBMIT"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/contentEditText" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="10sp"
+        android:layout_margin="10sp"
+        />
+
     <com.google.android.material.button.MaterialButton
+        android:backgroundTint="@color/red"
         android:id="@+id/deleteButton"
         android:text="Delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/submitButton" />
+        app:layout_constraintRight_toLeftOf="@id/submitButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="10sp"
+        android:layout_margin="10sp"/>
+    <ToggleButton
+        android:id="@+id/likeButton"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10sp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/toggle_selector"
+        android:padding="10sp"
+        android:textOff=""
+        android:textOn=""
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/deleteButton" />
+
+    <TextView
+        android:id="@+id/likesCount"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text=" Likes"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/likeButton"
+        app:layout_constraintRight_toRightOf="@id/likeButton"
+        tools:layout_editor_absoluteX="156dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

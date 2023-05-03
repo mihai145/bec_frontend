@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="80dp"
     tools:context=".activity.PostActivity">
 
     <TextView
@@ -61,11 +60,12 @@
         android:id="@+id/addComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/editPost"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:text="ADD COMMENT"
-        android:textSize="15dp" />
+        android:textSize="15sp"
+        android:padding="10sp"
+        android:layout_margin="10sp"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/deletePost"
@@ -75,9 +75,35 @@
         android:text="DELETE"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/editPost"
         android:padding="10sp"
         android:layout_margin="10sp"/>
+
+    <ToggleButton
+        android:id="@+id/likeButton"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10sp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/toggle_selector"
+        android:padding="10sp"
+        android:textOff=""
+        android:textOn=""
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/deletePost" />
+
+    <TextView
+        android:id="@+id/likesCount"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text=" Likes"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/likeButton"
+        app:layout_constraintRight_toRightOf="@id/likeButton"
+        tools:layout_editor_absoluteX="156dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -87,8 +113,12 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/postContent"/>
+        app:layout_constraintBottom_toTopOf="@id/addComment"
+        app:layout_constraintTop_toBottomOf="@id/postContent"
+        android:padding="10sp"
+        android:layout_margin="10sp" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

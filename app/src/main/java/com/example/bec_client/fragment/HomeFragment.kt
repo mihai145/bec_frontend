@@ -1,5 +1,6 @@
 package com.example.bec_client.fragment
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -16,18 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
-import com.example.bec_client.activity.PostActivity
 import com.example.bec_client.activity.PostFormActivity
 import com.example.bec_client.adapter.RecyclerAdapter
 import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.viewmodel.SearchViewModel
-
-
-import java.net.URL
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
-
-
 
 
 /**
@@ -80,10 +72,14 @@ class HomeFragment : Fragment() {
         reviewButton.setOnClickListener {
             if (reviewButton.text != "LOADING") {
                 if (MainActivity.cachedCredentials == null) {
-                    Toast.makeText(mView.context, "You need to be logged in to do that", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        mView.context,
+                        "You need to be logged in to do that",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 } else {
-                    val intent = Intent( mView.context, PostFormActivity::class.java)
+                    val intent = Intent(mView.context, PostFormActivity::class.java)
                     //intent.putExtra("authorId", userId)
                     //intent.putExtra("userId", userId)
                     intent.putExtra("newOrEdit", 0L)

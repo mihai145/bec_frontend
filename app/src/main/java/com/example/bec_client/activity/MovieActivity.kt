@@ -45,7 +45,7 @@ class MovieActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if(pressed) {
+        if (pressed) {
             pressed = false
 
             val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
