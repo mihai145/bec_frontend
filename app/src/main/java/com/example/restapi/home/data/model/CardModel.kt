@@ -1,22 +1,23 @@
 package com.example.restapi.home.data.model
 
 class CardModel {
-    var title:String?="Card Title"
-    var body:String?="Card Body"
-    var imagePath:String?=null
-    var id:Long?=0
-    var type:Int?=0
-    var postId:Long?=0
-    var userId:Long?=0
+    var title: String? = "Card Title"
+    var body: String? = "Card Body"
+    var imagePath: String? = null
+    var id: Long? = 0
+    var type: Int? = 0
+    var postId: Long? = 0
+    var userId: Long? = 0
 
-    constructor(movie:MovieModel){
+    constructor(movie: MovieModel) {
         imagePath = movie.posterPath
         title = movie.title
         body = movie.overview
         id = movie.id
         type = 1
     }
-    constructor(actor:ActorModel){
+
+    constructor(actor: ActorModel) {
         imagePath = actor.profilePath
         title = actor.name
         body = "Actor known for " + actor.knownForDepartment
@@ -24,14 +25,14 @@ class CardModel {
         type = 2
     }
 
-    constructor(user:UserModel) {
+    constructor(user: UserModel) {
         title = user.nickname
         body = "User " + user.nickname
         id = user.id
         type = 3
     }
 
-    constructor(post:PostModel) {
+    constructor(post: PostModel) {
         val title = post.title
         val author = post.authorNickname
         this.title = "$title by $author"

@@ -36,6 +36,7 @@ class ProfileFragment : Fragment() {
         super.onCreate(savedInstanceState)
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

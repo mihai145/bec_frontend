@@ -3,16 +3,11 @@ package com.example.bec_client.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -61,7 +56,7 @@ class PostActivity : AppCompatActivity() {
         id = intent.getLongExtra("id", -1)
         feedData(id)
         super.onResume()
-        if(pressed) {
+        if (pressed) {
             pressed = false
             searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
             searchViewModel.postInfo(id)
@@ -161,7 +156,7 @@ class PostActivity : AppCompatActivity() {
                 apiInterface?.deletePost(
                     MainActivity.cachedCredentials?.idToken.toString(),
                     requestModel
-                )?.enqueue(object : retrofit2.Callback<SimpleResponseModel> {
+                )?.enqueue(object : Callback<SimpleResponseModel> {
                     override fun onResponse(
                         call: Call<SimpleResponseModel>,
                         response: Response<SimpleResponseModel>
@@ -191,8 +186,11 @@ class PostActivity : AppCompatActivity() {
 
         likeButton.setOnClickListener {
             val requestModel = PostLikedModel(id, MainActivity.userId?.toLong() ?: -1L)
-            if(likeButton.isChecked) {
-                apiInterface?.likePost(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+            if (likeButton.isChecked) {
+                apiInterface?.likePost(
+                    MainActivity.cachedCredentials?.idToken.toString(),
+                    requestModel
+                )
                     ?.enqueue(object : Callback<SimpleResponseModel> {
                         override fun onResponse(
                             call: Call<SimpleResponseModel>,
@@ -200,7 +198,11 @@ class PostActivity : AppCompatActivity() {
                         ) {
                             val res = response.body()
                             if (response.code() == 202 && res != null && res.ok) {
-                                Toast.makeText(applicationContext, "Post was liked", Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Post was liked",
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                             } else {
                                 Toast.makeText(
@@ -220,7 +222,10 @@ class PostActivity : AppCompatActivity() {
                         }
                     })
             } else {
-                apiInterface?.deleteLikePost(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+                apiInterface?.deleteLikePost(
+                    MainActivity.cachedCredentials?.idToken.toString(),
+                    requestModel
+                )
                     ?.enqueue(object : Callback<SimpleResponseModel> {
                         override fun onResponse(
                             call: Call<SimpleResponseModel>,
@@ -228,7 +233,11 @@ class PostActivity : AppCompatActivity() {
                         ) {
                             val res = response.body()
                             if (response.code() == 202 && res != null && res.ok) {
-                                Toast.makeText(applicationContext, "Like was deleted", Toast.LENGTH_SHORT)
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Like was deleted",
+                                    Toast.LENGTH_SHORT
+                                )
                                     .show()
                             } else {
                                 Toast.makeText(
@@ -277,8 +286,7 @@ class PostActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(
-                rootView.context
-                ,LinearLayoutManager.VERTICAL, false
+                rootView.context, LinearLayoutManager.VERTICAL, false
             )
             recyclerAdapter = RecyclerAdapter()
             adapter = recyclerAdapter
@@ -297,7 +305,7 @@ class PostActivity : AppCompatActivity() {
         searchViewModel.wasLiked?.observe(this, Observer {
             Log.d("Was Liked", searchViewModel.wasLiked!!.value.toString())
             if (it != null) {
-                if(it == 1)
+                if (it == 1)
                     likeButton.isChecked = true
                 Log.d("Debug Liked", it.toString())
             }
@@ -319,5 +327,4 @@ class PostActivity : AppCompatActivity() {
             searchViewModel.getComments(id)
         }
     }
-
 }
