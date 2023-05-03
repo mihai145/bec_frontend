@@ -3,15 +3,11 @@ package com.example.bec_client.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
-
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,12 +18,13 @@ import com.example.bec_client.adapter.RecyclerAdapter
 import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.data.model.PostModel
 import com.example.restapi.home.data.model.request.PostInfoModel
+import com.example.restapi.home.data.model.request.PostLikedModel
 import com.example.restapi.home.data.model.response.SimpleResponseModel
 import com.example.restapi.home.viewmodel.SearchViewModel
 import com.example.restapi.network.ApiClient
 import com.example.restapi.network.ApiInterface
-import com.google.android.gms.common.api.internal.LifecycleActivity
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 class PostActivity : AppCompatActivity() {
@@ -41,10 +38,12 @@ class PostActivity : AppCompatActivity() {
     private lateinit var authorName: TextView
     private lateinit var movieName: TextView
     private lateinit var postContent: TextView
+    private lateinit var likesCount: TextView
 
     private lateinit var editButton: Button
     private lateinit var addComment: Button
     private lateinit var deleteButton: Button
+    private lateinit var likeButton: ToggleButton
     private var pressed: Boolean = false
 
     private var apiInterface: ApiInterface? = null
@@ -57,7 +56,7 @@ class PostActivity : AppCompatActivity() {
         id = intent.getLongExtra("id", -1)
         feedData(id)
         super.onResume()
-        if(pressed) {
+        if (pressed) {
             pressed = false
             searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
             searchViewModel.postInfo(id)
@@ -100,13 +99,17 @@ class PostActivity : AppCompatActivity() {
         authorName = findViewById(R.id.authorName)
         movieName = findViewById(R.id.movieName)
         postContent = findViewById(R.id.postContent)
+        likesCount = findViewById(R.id.likesCount)
 
         editButton = findViewById(R.id.editPost)
         addComment = findViewById(R.id.addComment)
         deleteButton = findViewById(R.id.deletePost)
+        likeButton = findViewById(R.id.likeButton)
 
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
         searchViewModel.postInfo(id)
+        searchViewModel.wasLikedPost(id, MainActivity.userId?.toLong() ?: -1L)
+        searchViewModel.getLikesPost(id)
 
         editButton.setOnClickListener {
             if ((MainActivity.userId?.toLong() ?: -1L) != post.authorId && !MainActivity.isAdmin) {
@@ -153,7 +156,7 @@ class PostActivity : AppCompatActivity() {
                 apiInterface?.deletePost(
                     MainActivity.cachedCredentials?.idToken.toString(),
                     requestModel
-                )?.enqueue(object : retrofit2.Callback<SimpleResponseModel> {
+                )?.enqueue(object : Callback<SimpleResponseModel> {
                     override fun onResponse(
                         call: Call<SimpleResponseModel>,
                         response: Response<SimpleResponseModel>
@@ -178,6 +181,81 @@ class PostActivity : AppCompatActivity() {
                         pressed = false
                     }
                 })
+            }
+        }
+
+        likeButton.setOnClickListener {
+            val requestModel = PostLikedModel(id, MainActivity.userId?.toLong() ?: -1L)
+            if (likeButton.isChecked) {
+                apiInterface?.likePost(
+                    MainActivity.cachedCredentials?.idToken.toString(),
+                    requestModel
+                )
+                    ?.enqueue(object : Callback<SimpleResponseModel> {
+                        override fun onResponse(
+                            call: Call<SimpleResponseModel>,
+                            response: Response<SimpleResponseModel>
+                        ) {
+                            val res = response.body()
+                            if (response.code() == 202 && res != null && res.ok) {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Post was liked",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Please try again",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<SimpleResponseModel>, t: Throwable) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Please try again",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
+            } else {
+                apiInterface?.deleteLikePost(
+                    MainActivity.cachedCredentials?.idToken.toString(),
+                    requestModel
+                )
+                    ?.enqueue(object : Callback<SimpleResponseModel> {
+                        override fun onResponse(
+                            call: Call<SimpleResponseModel>,
+                            response: Response<SimpleResponseModel>
+                        ) {
+                            val res = response.body()
+                            if (response.code() == 202 && res != null && res.ok) {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Like was deleted",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            } else {
+                                Toast.makeText(
+                                    applicationContext,
+                                    "Please try again",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<SimpleResponseModel>, t: Throwable) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Please try again",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
             }
         }
 
@@ -208,8 +286,7 @@ class PostActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(
-                rootView.context
-                ,LinearLayoutManager.VERTICAL, false
+                rootView.context, LinearLayoutManager.VERTICAL, false
             )
             recyclerAdapter = RecyclerAdapter()
             adapter = recyclerAdapter
@@ -222,6 +299,23 @@ class PostActivity : AppCompatActivity() {
                 Log.d("DebugPosts", it.toString())
             } else {
                 Log.d("DEBUG POSTS:", "a crapat")
+            }
+        })
+
+        searchViewModel.wasLiked?.observe(this, Observer {
+            Log.d("Was Liked", searchViewModel.wasLiked!!.value.toString())
+            if (it != null) {
+                if (it == 1)
+                    likeButton.isChecked = true
+                Log.d("Debug Liked", it.toString())
+            }
+        })
+
+        searchViewModel.likes?.observe(this, Observer {
+            Log.d("Likes", searchViewModel.likes!!.value.toString())
+            if (it != null) {
+                likesCount.text = "$it Likes"
+                Log.d("Debug Likes", it.toString())
             }
         })
     }
