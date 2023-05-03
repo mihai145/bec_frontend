@@ -48,4 +48,11 @@ class CardModel {
         postId = comment.postId
         this.userId = comment.authorId
     }
+
+    constructor(user: LeaderboardModel) {
+        title = user.nickname
+        body = "User " + user.nickname + " has " + user.totalLikes + " likes"
+        id = user.id
+        type = 3
+    }
 }

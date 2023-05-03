@@ -110,4 +110,55 @@ interface ApiInterface {
 
     @POST("trending")
     fun getTrending(@Body genreId: SearchByGenreIdModel): Call<TrendingResponseModel>
+
+    @GET("leaderboard")
+    fun leaderboard(@Header("Bearer") token: String): Call<LeaderboardResponseModel>
+    @POST("likesPost")
+    fun getLikesPost(
+        @Header("Bearer") token: String,
+        @Body postInfo: PostInfoModel
+    ): Call<LikeResponseModel>
+
+    @POST("likePost")
+    fun likePost(
+        @Header("Bearer") token: String,
+        @Body postInfo: PostLikedModel
+    ): Call<SimpleResponseModel>
+
+    @POST("getLikePost")
+    fun wasLikedPost(
+        @Header("Bearer") token: String,
+        @Body postInfo: PostLikedModel
+    ): Call<LikeResponseModel>
+
+    @POST("deleteLikePost")
+    fun deleteLikePost(
+        @Header("Bearer") token: String,
+        @Body postInfo: PostLikedModel
+    ): Call<SimpleResponseModel>
+
+    @POST("likesComment")
+    fun getLikesComment(
+        @Header("Bearer") token: String,
+        @Body postInfo: CommentInfoModel
+    ): Call<LikeResponseModel>
+
+    @POST("likeComment")
+    fun likeComment(
+        @Header("Bearer") token: String,
+        @Body postInfo: CommentLikedModel
+    ): Call<SimpleResponseModel>
+
+    @POST("getLikeComment")
+    fun wasLikedComment(
+        @Header("Bearer") token: String,
+        @Body postInfo: CommentLikedModel
+    ): Call<LikeResponseModel>
+
+    @POST("deleteLikeComment")
+    fun deleteLikeComment(
+        @Header("Bearer") token: String,
+        @Body postInfo: CommentLikedModel
+    ): Call<SimpleResponseModel>
+
 }
