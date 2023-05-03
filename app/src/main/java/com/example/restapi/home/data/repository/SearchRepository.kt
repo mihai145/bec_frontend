@@ -289,4 +289,32 @@ class SearchRepository {
 
         return data
     }
+
+    fun getLeaderboard(): LiveData<LeaderboardResponseModel> {
+        val data = MutableLiveData<LeaderboardResponseModel>()
+
+        apiInterface?.leaderboard(MainActivity.cachedCredentials?.idToken.toString())
+            ?.enqueue(object : Callback<LeaderboardResponseModel> {
+                override fun onFailure(call: Call<LeaderboardResponseModel>, t: Throwable) {
+                    Log.d("Leaderboard", "failure")
+                    data.value = null
+                }
+
+                override fun onResponse(
+                    call: Call<LeaderboardResponseModel>,
+                    response: Response<LeaderboardResponseModel>
+                ) {
+                    val res = response.body()
+                    if (response.code() == 202 && res != null && res.ok == true) {
+                        Log.d("Leaderboard", res.toString())
+                        data.value = res
+                    } else {
+                        Log.d("Leaderboard", "failure")
+                        data.value = null
+                    }
+                }
+            })
+
+        return data
+    }
 }

@@ -110,4 +110,7 @@ interface ApiInterface {
 
     @POST("trending")
     fun getTrending(@Body genreId: SearchByGenreIdModel): Call<TrendingResponseModel>
+
+    @GET("leaderboard")
+    fun leaderboard(@Header("Bearer") token: String): Call<LeaderboardResponseModel>
 }
