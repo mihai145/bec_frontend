@@ -1,6 +1,7 @@
 package com.example.bec_client
 
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -12,8 +13,24 @@ import com.auth0.android.jwt.JWT
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import com.auth0.android.result.UserProfile
+import com.auth0.jwt.algorithms.Algorithm
 import com.example.bec_client.fragment.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.File
+import java.io.FileOutputStream
+import java.security.KeyFactory
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
+import java.security.interfaces.RSAPublicKey
+import java.security.spec.X509EncodedKeySpec
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var account: Auth0
@@ -24,9 +41,58 @@ class MainActivity : AppCompatActivity() {
     private val nearbyFragment = NearbyFragment()
 
     companion object {
+        var pemCertificate: String? = null
         var cachedCredentials: Credentials? = null
         var cachedUserProfile: UserProfile? = null
         var userId: Int? = null
+        var isAdmin: Boolean = false
+    }
+
+    private fun downloadCertificate() {
+        if (pemCertificate != null) return
+
+        val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
+            throwable.printStackTrace()
+        }
+
+        GlobalScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+            val client = OkHttpClient()
+            val request = Request.Builder()
+                .url("https://dev-jc1flmgwmyky8n0k.us.auth0.com/pem")
+                .build()
+            val response = client.newCall(request).execute()
+            val pem = response.body?.string()
+            response.close()
+
+            if (pem != null) {
+                Log.d("INFO", "Certificate download succeeded")
+                pemCertificate = pem
+            } else {
+                Log.d("ERR", "Certificate download failed")
+            }
+        }
+    }
+
+    private fun verifyJwtToken(token: String, certificateString: String) {
+        // Parse certificate
+        val certificateFactory = CertificateFactory.getInstance("X.509")
+        val certificateInputStream = certificateString.byteInputStream()
+        val certificate = certificateFactory.generateCertificate(certificateInputStream) as X509Certificate
+        val publicKey = certificate.publicKey as RSAPublicKey
+
+        // Verify JWT token
+        val algorithm = Algorithm.RSA256(publicKey, null)
+        val verifier = com.auth0.jwt.JWT.require(algorithm)
+            .ignoreIssuedAt()
+            .withIssuer("https://dev-jc1flmgwmyky8n0k.us.auth0.com/")
+            .build()
+        val decodedToken = verifier.verify(token)
+
+        val role = decodedToken.getClaim("https://example.com/role").asString()
+        Log.d("USER ROLE", role)
+        if (role == "admin") {
+            isAdmin = true
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +117,8 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
+        downloadCertificate()
     }
 
     private fun getUserId(idToken: String): Int {
@@ -81,6 +149,10 @@ class MainActivity : AppCompatActivity() {
                     userId = getUserId(cachedCredentials!!.idToken)
 
                     Log.d("ID TOKEN", credentials.idToken)
+
+                    verifyJwtToken(
+                        cachedCredentials!!.idToken, pemCertificate.toString())
+
                     showUserProfile(credentials.accessToken)
                 }
             })
@@ -94,6 +166,8 @@ class MainActivity : AppCompatActivity() {
                     // The user has been logged out!
                     cachedUserProfile = null
                     cachedCredentials = null
+                    userId = null
+                    isAdmin = false
                 }
 
                 override fun onFailure(error: AuthenticationException) {

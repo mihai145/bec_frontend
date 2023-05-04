@@ -111,6 +111,9 @@ interface ApiInterface {
     @POST("trending")
     fun getTrending(@Body genreId: SearchByGenreIdModel): Call<TrendingResponseModel>
 
+    @POST("deleteUser")
+    fun deleteUser(@Header("Bearer") token: String,
+                   @Body deletePost: UserDeleteModel): Call<SimpleResponseModel>
     @GET("leaderboard")
     fun leaderboard(@Header("Bearer") token: String): Call<LeaderboardResponseModel>
     @POST("likesPost")
@@ -160,5 +163,4 @@ interface ApiInterface {
         @Header("Bearer") token: String,
         @Body postInfo: CommentLikedModel
     ): Call<SimpleResponseModel>
-
 }

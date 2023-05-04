@@ -112,7 +112,7 @@ class PostActivity : AppCompatActivity() {
         searchViewModel.getLikesPost(id)
 
         editButton.setOnClickListener {
-            if ((MainActivity.userId?.toLong() ?: -1L) != post.authorId) {
+            if ((MainActivity.userId?.toLong() ?: -1L) != post.authorId && !MainActivity.isAdmin) {
                 Toast.makeText(
                     applicationContext,
                     "You can only edit your own posts",
@@ -144,7 +144,7 @@ class PostActivity : AppCompatActivity() {
         }
 
         deleteButton.setOnClickListener {
-            if ((MainActivity.userId?.toLong() ?: -1L) != post.authorId) {
+            if ((MainActivity.userId?.toLong() ?: -1L) != post.authorId && !MainActivity.isAdmin) {
                 Toast.makeText(
                     applicationContext,
                     "You can only delete your own posts",

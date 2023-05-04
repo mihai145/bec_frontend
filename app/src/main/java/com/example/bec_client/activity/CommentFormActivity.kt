@@ -50,7 +50,7 @@ class CommentFormActivity : AppCompatActivity() {
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
         newOrEdit = intent.getLongExtra("newOrEdit", -1)
         if (newOrEdit == -1L)
-            throw Exception("Malformed Post Form Activity")
+            throw Exception("Malformed Comment Form Activity")
 
         content = intent.getStringExtra("content").toString()
 
@@ -78,7 +78,7 @@ class CommentFormActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                if ((MainActivity.userId?.toLong() ?: -1L) != authorId.toLong()) {
+                if ((MainActivity.userId?.toLong() ?: -1L) != authorId.toLong() && !MainActivity.isAdmin) {
                     Toast.makeText(
                         applicationContext,
                         "You can delete only your comments",
@@ -121,7 +121,7 @@ class CommentFormActivity : AppCompatActivity() {
         }
 
         submitButton.setOnClickListener {
-            if ((MainActivity.userId?.toLong() ?: -1L) != authorId && newOrEdit == 1L) {
+            if ((MainActivity.userId?.toLong() ?: -1L) != authorId && newOrEdit == 1L && !MainActivity.isAdmin) {
                 Toast.makeText(
                     applicationContext,
                     "You can only edit your comments",
