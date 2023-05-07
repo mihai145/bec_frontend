@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
 import com.example.bec_client.activity.PostFormActivity
@@ -30,7 +31,7 @@ import com.example.restapi.home.viewmodel.SearchViewModel
 class HomeFragment : Fragment() {
     private lateinit var searchViewModel: SearchViewModel
     private lateinit var recyclerAdapter: RecyclerAdapter
-
+    private lateinit var swipeContainer: SwipeRefreshLayout
     ////
     private lateinit var reviewButton: Button
     ////
@@ -45,8 +46,9 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val mView: View = inflater.inflate(R.layout.fragment_home, container, false)
-
+        val swipeContainer: SwipeRefreshLayout = mView.findViewById(R.id.swipeContainer)
         val recyclerView: RecyclerView = mView.findViewById(R.id.recycler_view)
+
         recyclerView.apply {
             layoutManager = LinearLayoutManager(
                 requireContext(),
@@ -57,7 +59,10 @@ class HomeFragment : Fragment() {
         }
 
         feedData()
-
+        swipeContainer.setOnRefreshListener {
+            feedData()
+            swipeContainer.isRefreshing = false
+        }
         /////
         //val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
         reviewButton = mView.findViewById(R.id.review_button)
