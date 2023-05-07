@@ -57,14 +57,6 @@ class HomeFragment : Fragment() {
         }
 
         feedData()
-        searchViewModel.postsLiveData?.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                recyclerAdapter.submitList(it.posts.map { x -> CardModel(x) })
-                Log.d("DebugPosts", it.toString())
-            } else {
-                Log.d("DEBUG POSTS:", "a crapat")
-            }
-        })
 
         /////
         //val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
@@ -97,8 +89,10 @@ class HomeFragment : Fragment() {
     }
 
     override fun onResume() {
-        feedData()
         super.onResume()
+        feedData()
+        Log.d("DEBUG", "onResume called inside HomeFragment")
+        recyclerAdapter.notifyDataSetChanged();
     }
 
     fun feedData() {
@@ -107,5 +101,13 @@ class HomeFragment : Fragment() {
             recyclerAdapter.resetAdapter()
             searchViewModel.getPosts()
         }
+        searchViewModel.postsLiveData?.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                recyclerAdapter.submitList(it.posts.map { x -> CardModel(x) })
+                Log.d("DebugPosts", it.toString())
+            } else {
+                Log.d("DEBUG POSTS:", "a crapat")
+            }
+        })
     }
 }
