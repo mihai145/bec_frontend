@@ -110,7 +110,7 @@ class NearbyFragment : Fragment() {
         }
         // unused movie icon
         val supportMapFragment =
-            childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
+            childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         supportMapFragment.getMapAsync {
             // center map on current location and add markers for each cinema
             if (ActivityCompat.checkSelfPermission(

@@ -32,8 +32,8 @@ class ProfileFragment : Fragment() {
     }
 
     fun setupProfileFragment() {
-        val profileInfo: TextView? = view?.findViewById(R.id.profile_text_view)
-        val button: Button? = view?.findViewById(R.id.login_logout_button)
+        val profileInfo: TextView? = view?.findViewById(R.id.profileTextView)
+        val button: Button? = view?.findViewById(R.id.loginLogoutButton)
 
         val mainActivity = activity as? MainActivity
 
@@ -63,7 +63,7 @@ class ProfileFragment : Fragment() {
 
         // this will have to change later... we will add the id token to all requests to the backend
         val amIAuthenticatedButton: Button? =
-            getView()?.findViewById(R.id.am_i_authenticated_button)
+            getView()?.findViewById(R.id.amIAuthenticatedButton)
         amIAuthenticatedButton?.setOnClickListener {
             val executor = Executors.newSingleThreadExecutor()
             executor.execute {

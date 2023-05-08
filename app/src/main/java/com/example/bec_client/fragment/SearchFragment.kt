@@ -70,7 +70,7 @@ class SearchFragment : Fragment() {
     ): View? {
         val mView: View = inflater.inflate(R.layout.fragment_search, container, false)
         val searchView: SearchView = mView.findViewById(R.id.SearchView)
-        val recyclerView: RecyclerView = mView.findViewById(R.id.recycler_view)
+        val recyclerView: RecyclerView = mView.findViewById(R.id.recyclerView)
         recyclerView.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)

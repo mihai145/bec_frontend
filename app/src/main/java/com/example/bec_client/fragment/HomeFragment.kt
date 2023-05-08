@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
     ): View? {
         val mView: View = inflater.inflate(R.layout.fragment_home, container, false)
 
-        val recyclerView: RecyclerView = mView.findViewById(R.id.recycler_view)
+        val recyclerView: RecyclerView = mView.findViewById(R.id.recyclerView)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(
                 requireContext(),

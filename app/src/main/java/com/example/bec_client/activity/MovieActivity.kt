@@ -85,10 +85,10 @@ class MovieActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
 
-        moviePoster = findViewById(R.id.movie_poster)
-        movieTitle = findViewById(R.id.movie_title)
-        movieReleaseDate = findViewById(R.id.movie_release_date)
-        movieOverview = findViewById(R.id.movie_overview)
+        moviePoster = findViewById(R.id.moviePoster)
+        movieTitle = findViewById(R.id.movieTitle)
+        movieReleaseDate = findViewById(R.id.movieReleaseDate)
+        movieOverview = findViewById(R.id.movieOverview)
 
         id = intent.getLongExtra("id", -1)
         if (id == -1L)
@@ -128,7 +128,7 @@ class MovieActivity : AppCompatActivity() {
         // get user id from id token...
         val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
 
-        reviewButton = findViewById(R.id.review_button)
+        reviewButton = findViewById(R.id.reviewButton)
         reviewButton.setOnClickListener {
             pressed = true
             if (reviewButton.text != "LOADING") {

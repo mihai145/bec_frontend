@@ -55,7 +55,7 @@ class UserActivity : AppCompatActivity() {
         val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
         searchViewModel.userFollowInfo(userId.toLong(), id)
 
-        followButton = findViewById(R.id.follow_button)
+        followButton = findViewById(R.id.followButton)
         followButton.setOnClickListener {
             if (followButton.text != "LOADING") {
                 if (MainActivity.cachedCredentials == null) {

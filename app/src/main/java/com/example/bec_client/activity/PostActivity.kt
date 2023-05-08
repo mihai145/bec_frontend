@@ -205,7 +205,7 @@ class PostActivity : AppCompatActivity() {
             }
         })
 
-        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(
                 rootView.context
