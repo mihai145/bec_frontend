@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
+import com.example.restapi.home.data.model.request.UserDeleteModel
 import com.example.restapi.home.data.model.request.UserFollowModel
 import com.example.restapi.home.data.model.response.SimpleResponseModel
 import com.example.restapi.home.viewmodel.SearchViewModel
@@ -28,6 +29,7 @@ class UserActivity : AppCompatActivity() {
 
     private lateinit var username: TextView
     private lateinit var followButton: Button
+    private lateinit var deleteButton: Button
 
     private var apiInterface: ApiInterface? = null
 
@@ -150,6 +152,68 @@ class UserActivity : AppCompatActivity() {
                         })
                     }
                 }
+            }
+        }
+
+        deleteButton = findViewById(R.id.delete_user_button)
+        deleteButton.setOnClickListener {
+            if (MainActivity.cachedCredentials == null) {
+                Toast.makeText(this, "You need to be logged in to do that", Toast.LENGTH_SHORT)
+                    .show()
+            } else if (userId.toLong() == id) {
+                Toast.makeText(this, "You cannot delete yourself", Toast.LENGTH_SHORT).show()
+            } else if (!MainActivity.isAdmin) {
+                Toast.makeText(this, "You are not an admin", Toast.LENGTH_SHORT).show()
+            } else {
+                // delete user logic
+                followButton.text = "LOADING"
+
+                val requestModel = UserDeleteModel(id.toInt())
+
+                apiInterface?.deleteUser(
+                    MainActivity.cachedCredentials?.idToken.toString(),
+                    requestModel
+                )?.enqueue(object :
+                    Callback<SimpleResponseModel> {
+                    override fun onFailure(call: Call<SimpleResponseModel>, t: Throwable) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Please try again",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        if (following) {
+                            followButton.text = "UNFOLLOW"
+                        } else {
+                            followButton.text = "FOLLOW"
+                        }
+                    }
+
+                    override fun onResponse(
+                        call: Call<SimpleResponseModel>,
+                        response: Response<SimpleResponseModel>
+                    ) {
+                        val res = response.body()
+                        if (response.code() == 202 && res != null && res.ok) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Deleted",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            finish()
+                        } else {
+                            Toast.makeText(
+                                applicationContext,
+                                "Please try again",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            if (following) {
+                                followButton.text = "UNFOLLOW"
+                            } else {
+                                followButton.text = "FOLLOW"
+                            }
+                        }
+                    }
+                })
             }
         }
 
