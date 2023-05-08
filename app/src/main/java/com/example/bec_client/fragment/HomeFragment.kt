@@ -58,7 +58,6 @@ class HomeFragment : Fragment() {
             adapter = recyclerAdapter
         }
 
-        feedData()
         swipeContainer.setOnRefreshListener {
             feedData()
             swipeContainer.isRefreshing = false

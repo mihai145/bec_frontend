@@ -292,8 +292,6 @@ class PostActivity : AppCompatActivity() {
             adapter = recyclerAdapter
         }
 
-        feedData(id)
-
     }
 
     private fun feedData(id: Long) {
