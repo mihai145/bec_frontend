@@ -292,7 +292,14 @@ class PostActivity : AppCompatActivity() {
             adapter = recyclerAdapter
         }
 
-        feedData(id)
+    }
+
+    private fun feedData(id: Long) {
+        // populate recycler
+        if (MainActivity.cachedCredentials != null) {
+            recyclerAdapter.resetAdapter()
+            searchViewModel.getComments(id)
+        }
         searchViewModel.commentsLiveData?.observe(this, Observer {
             if (it != null) {
                 recyclerAdapter.submitList(it.comments.map { x -> CardModel(x) })
@@ -318,13 +325,5 @@ class PostActivity : AppCompatActivity() {
                 Log.d("Debug Likes", it.toString())
             }
         })
-    }
-
-    private fun feedData(id: Long) {
-        // populate recycler
-        if (MainActivity.cachedCredentials != null) {
-            recyclerAdapter.resetAdapter()
-            searchViewModel.getComments(id)
-        }
     }
 }

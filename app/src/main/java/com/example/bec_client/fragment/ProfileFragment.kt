@@ -52,15 +52,6 @@ class ProfileFragment : Fragment() {
             adapter = recyclerAdapter
         }
 
-        feedData()
-        searchViewModel.leaderboardLiveData?.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                recyclerAdapter.submitList(it.users.map { x -> CardModel(x) })
-                Log.d("DebugLeaderboard", it.toString())
-            } else {
-                Log.d("DEBUG POSTS:", "a crapat")
-            }
-        })
 
         return mView
     }
@@ -69,6 +60,14 @@ class ProfileFragment : Fragment() {
         // populate recycler
         recyclerAdapter.resetAdapter()
         searchViewModel.getLeaderboard()
+        searchViewModel.leaderboardLiveData?.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                recyclerAdapter.submitList(it.users.map { x -> CardModel(x) })
+                Log.d("DebugLeaderboard", it.toString())
+            } else {
+                Log.d("DEBUG POSTS:", "a crapat")
+            }
+        })
     }
 
     fun setupProfileFragment() {
