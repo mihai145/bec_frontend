@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
 
         /////
         //val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
-        reviewButton = mView.findViewById(R.id.review_button)
+        reviewButton = mView.findViewById(R.id.reviewButton)
         reviewButton.setOnClickListener {
             if (reviewButton.text != "LOADING") {
                 if (MainActivity.cachedCredentials == null) {

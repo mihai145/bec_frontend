@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
-import com.example.bec_client.adapter.RecyclerAdapter
+import com.example.bec_client.adapter.CommentAdapter
 import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.data.model.PostModel
 import com.example.restapi.home.data.model.request.PostInfoModel
@@ -31,7 +31,7 @@ class PostActivity : AppCompatActivity() {
     private var id: Long = 0
 
     private lateinit var searchViewModel: SearchViewModel
-    private lateinit var recyclerAdapter: RecyclerAdapter
+    private lateinit var recyclerAdapter: CommentAdapter
     private lateinit var post: PostModel
 
     private lateinit var postTitle: TextView
@@ -288,7 +288,7 @@ class PostActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(
                 rootView.context, LinearLayoutManager.VERTICAL, false
             )
-            recyclerAdapter = RecyclerAdapter()
+            recyclerAdapter = CommentAdapter()
             adapter = recyclerAdapter
         }
 

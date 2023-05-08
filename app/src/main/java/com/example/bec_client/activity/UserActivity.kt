@@ -155,7 +155,7 @@ class UserActivity : AppCompatActivity() {
             }
         }
 
-        deleteButton = findViewById(R.id.delete_user_button)
+        deleteButton = findViewById(R.id.deleteUserButton)
         deleteButton.setOnClickListener {
             if (MainActivity.cachedCredentials == null) {
                 Toast.makeText(this, "You need to be logged in to do that", Toast.LENGTH_SHORT)

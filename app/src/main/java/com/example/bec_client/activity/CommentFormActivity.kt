@@ -1,10 +1,8 @@
 package com.example.bec_client.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
@@ -27,10 +25,8 @@ class CommentFormActivity : AppCompatActivity() {
     private lateinit var searchViewModel: SearchViewModel
     private lateinit var newCommentTitle: TextView
     private lateinit var contentEditText: EditText
-    private lateinit var likesCount: TextView
     private lateinit var submitButton: Button
     private lateinit var deleteButton: Button
-    private lateinit var likeButton: ToggleButton
     private var pressed: Boolean = false
 
     private var apiInterface: ApiInterface? = null
@@ -58,14 +54,9 @@ class CommentFormActivity : AppCompatActivity() {
         if (newOrEdit == 1L) newCommentTitle.text = "EDIT COMMENT"
 
         contentEditText = findViewById(R.id.contentEditText)
-        likesCount = findViewById(R.id.likesCount)
         submitButton = findViewById(R.id.submitButton)
         deleteButton = findViewById(R.id.deleteButton)
-        likeButton = findViewById(R.id.likeButton)
         contentEditText.setText(content)
-
-        searchViewModel.wasLikedComment(commentId, MainActivity.userId?.toLong() ?: -1L)
-        searchViewModel.getLikesComment(commentId)
 
         // get user id from id token...
         val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
@@ -78,7 +69,7 @@ class CommentFormActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                if ((MainActivity.userId?.toLong() ?: -1L) != authorId.toLong() && !MainActivity.isAdmin) {
+                if ((MainActivity.userId?.toLong() ?: -1L) != authorId && !MainActivity.isAdmin) {
                     Toast.makeText(
                         applicationContext,
                         "You can delete only your comments",
@@ -90,7 +81,7 @@ class CommentFormActivity : AppCompatActivity() {
                     apiInterface?.deleteComment(
                         MainActivity.cachedCredentials?.idToken.toString(),
                         requestModel
-                    )?.enqueue(object : retrofit2.Callback<SimpleResponseModel> {
+                    )?.enqueue(object : Callback<SimpleResponseModel> {
                         override fun onResponse(
                             call: Call<SimpleResponseModel>,
                             response: Response<SimpleResponseModel>
@@ -140,7 +131,7 @@ class CommentFormActivity : AppCompatActivity() {
                     apiInterface?.submitComment(
                         MainActivity.cachedCredentials?.idToken.toString(),
                         requestModel
-                    )?.enqueue(object : retrofit2.Callback<SimpleResponseModel> {
+                    )?.enqueue(object : Callback<SimpleResponseModel> {
                         override fun onResponse(
                             call: Call<SimpleResponseModel>,
                             response: Response<SimpleResponseModel>
@@ -180,7 +171,7 @@ class CommentFormActivity : AppCompatActivity() {
                     apiInterface?.editComment(
                         MainActivity.cachedCredentials?.idToken.toString(),
                         requestModel
-                    )?.enqueue(object : retrofit2.Callback<SimpleResponseModel> {
+                    )?.enqueue(object : Callback<SimpleResponseModel> {
                         override fun onResponse(
                             call: Call<SimpleResponseModel>,
                             response: Response<SimpleResponseModel>
@@ -212,83 +203,5 @@ class CommentFormActivity : AppCompatActivity() {
                 }
             }
         }
-        likeButton.setOnClickListener {
-            val requestModel = CommentLikedModel(commentId, MainActivity.userId?.toLong() ?: -1L)
-            if(likeButton.isChecked) {
-                apiInterface?.likeComment(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
-                    ?.enqueue(object : Callback<SimpleResponseModel> {
-                        override fun onResponse(
-                            call: Call<SimpleResponseModel>,
-                            response: Response<SimpleResponseModel>
-                        ) {
-                            val res = response.body()
-                            if (response.code() == 202 && res != null && res.ok) {
-                                Toast.makeText(applicationContext, "Comment was liked", Toast.LENGTH_SHORT)
-                                    .show()
-                            } else {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Please try again",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-
-                        override fun onFailure(call: Call<SimpleResponseModel>, t: Throwable) {
-                            Toast.makeText(
-                                applicationContext,
-                                "Please try again",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    })
-            } else {
-                apiInterface?.deleteLikeComment(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
-                    ?.enqueue(object : Callback<SimpleResponseModel> {
-                        override fun onResponse(
-                            call: Call<SimpleResponseModel>,
-                            response: Response<SimpleResponseModel>
-                        ) {
-                            val res = response.body()
-                            if (response.code() == 202 && res != null && res.ok) {
-                                Toast.makeText(applicationContext, "Like was deleted", Toast.LENGTH_SHORT)
-                                    .show()
-                            } else {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Please try again",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-
-                        override fun onFailure(call: Call<SimpleResponseModel>, t: Throwable) {
-                            Toast.makeText(
-                                applicationContext,
-                                "Please try again",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    })
-            }
-        }
-
-
-        searchViewModel.wasLiked?.observe(this, Observer {
-            Log.d("Was Liked", searchViewModel.wasLiked!!.value.toString())
-            if (it != null) {
-                if(it == 1)
-                    likeButton.isChecked = true
-                Log.d("Debug Liked", it.toString())
-            }
-        })
-
-        searchViewModel.likes?.observe(this, Observer {
-            Log.d("Likes", searchViewModel.likes!!.value.toString())
-            if (it != null) {
-                likesCount.text = "$it Likes"
-                Log.d("Debug Likes", it.toString())
-            }
-        })
     }
 }

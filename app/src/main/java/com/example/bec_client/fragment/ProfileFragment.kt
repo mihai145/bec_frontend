@@ -42,7 +42,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val mView: View = inflater.inflate(R.layout.fragment_profile, container, false)
-        val recyclerView: RecyclerView = mView.findViewById(R.id.recycler_view)
+        val recyclerView: RecyclerView = mView.findViewById(R.id.recyclerView)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(
                 requireContext(),
