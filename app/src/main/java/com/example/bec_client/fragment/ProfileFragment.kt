@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
+import com.example.bec_client.adapter.LeaderboardAdapter
 import com.example.bec_client.adapter.RecyclerAdapter
 import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.viewmodel.SearchViewModel
@@ -30,7 +31,7 @@ import java.util.concurrent.TimeUnit
  */
 class ProfileFragment : Fragment() {
     private lateinit var searchViewModel: SearchViewModel
-    private lateinit var recyclerAdapter: RecyclerAdapter
+    private lateinit var recyclerAdapter: LeaderboardAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +49,7 @@ class ProfileFragment : Fragment() {
                 requireContext(),
                 LinearLayoutManager.VERTICAL, false
             )
-            recyclerAdapter = RecyclerAdapter()
+            recyclerAdapter = LeaderboardAdapter()
             adapter = recyclerAdapter
         }
 
