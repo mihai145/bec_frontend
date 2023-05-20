@@ -93,4 +93,10 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         notificationUser = searchRepository?.getNotification(userId)
     }
 
+    fun deleteNotification(notificationId: Int)
+    {
+        searchRepository?.deleteNotification(notificationId)
+    }
+
+
 }

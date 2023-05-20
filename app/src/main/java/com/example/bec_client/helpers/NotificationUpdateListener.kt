@@ -1,15 +1,15 @@
-import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import androidx.lifecycle.LifecycleOwner
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import com.example.bec_client.MainActivity
-import com.example.restapi.home.data.model.NotificationModel
+import com.example.restapi.home.data.model.request.NotificationDelete
+import com.example.restapi.home.data.model.response.SimpleResponseModel
 import com.example.restapi.home.viewmodel.SearchViewModel
+import com.example.restapi.network.ApiInterface
 import kotlinx.coroutines.*
+import retrofit2.Call
+import retrofit2.Response
 import java.util.concurrent.Executors
 
 class NotificationUpdateListener(
@@ -22,7 +22,6 @@ class NotificationUpdateListener(
     public var userId: Long? = 0
 
     private var displayedNotif = mutableSetOf<Long?>()
-
     init  {
         searchViewModel = ViewModelProvider(owner)[SearchViewModel::class.java]
     }
@@ -50,6 +49,10 @@ class NotificationUpdateListener(
 
         Log.d("DEBUG","Listener started.")
     }
+    fun deleteNotif(notifId: Int)
+    {
+        searchViewModel.deleteNotification(notifId)
+    }
 
     fun stopListening() {
         if (!isListening) {
@@ -60,6 +63,8 @@ class NotificationUpdateListener(
         isListening = false
         job?.cancel()
         executor.shutdown()
+        // idk just delete them all if they have already been displaye
+        displayedNotif.forEach { notif -> deleteNotif(notif!!.toInt()) }
         displayedNotif.clear()
         Log.d("DEBUG","Listener stopped.")
     }
@@ -76,7 +81,7 @@ class NotificationUpdateListener(
                         if(displayedNotif.add(notification.notificationId))
                         {
                             // Element was not in set
-                            notification.message?.let { it1 -> owner.sendNotification(it1) };
+                            owner.sendNotification(notification.notificationId!!.toInt(),notification.message!!)
                         }
                     }
             } else {

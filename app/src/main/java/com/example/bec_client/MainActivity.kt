@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var notifManger : NotificationManagerCompat
     val CHANNEL_ID = "channelID"
     val CHANNEL_NAME = "channelName"
-    var NOTIF_ID = 0
     private fun createNotifChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT).apply {
@@ -68,7 +67,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    public fun sendNotification(notif: String)
+    public fun sendNotification(notificationId: Int,notif: String)
     {
         val notif = NotificationCompat.Builder(this,CHANNEL_ID)
             .setSmallIcon(R.drawable.baseline_trending_up_24)
@@ -76,8 +75,7 @@ class MainActivity : AppCompatActivity() {
             .setContentText(notif)
             .build()
 
-        notifManger.notify(NOTIF_ID,notif)
-        NOTIF_ID += 1
+        notifManger.notify(notificationId,notif)
     }
 
     companion object {
@@ -207,6 +205,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun logout() {
+        Listener.stopListening()
         WebAuthProvider.logout(account)
             .withScheme("demo")
             .start(this, object : Callback<Void?, AuthenticationException> {
@@ -216,7 +215,6 @@ class MainActivity : AppCompatActivity() {
                     cachedCredentials = null
                     userId = null
                     isAdmin = false
-                    Listener.stopListening()
                 }
 
                 override fun onFailure(error: AuthenticationException) {

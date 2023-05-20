@@ -169,4 +169,10 @@ interface ApiInterface {
         @Header("Bearer") token : String,
         @Body userNot : UserNotificationModel
     ): Call<NotificationResponseModel>
+
+    @POST("deleteNotification")
+    fun deleteNotification(
+        @Header("Bearer") token : String,
+        @Body notId : NotificationDelete
+    ): Call<SimpleResponseModel>
 }
