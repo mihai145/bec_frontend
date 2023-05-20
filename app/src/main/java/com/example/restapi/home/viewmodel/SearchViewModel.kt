@@ -88,7 +88,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         likes = searchRepository?.getLikesComment(commentId)
     }
 
-    fun getNotificationUser(userId: Long?)
+    fun getNotificationUser(userId: Long)
     {
         notificationUser = searchRepository?.getNotification(userId)
     }

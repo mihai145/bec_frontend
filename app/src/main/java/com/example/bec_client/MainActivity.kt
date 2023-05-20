@@ -1,9 +1,19 @@
 package com.example.bec_client
 
+import NotificationUpdateListener
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Base64
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
@@ -15,6 +25,7 @@ import com.auth0.android.result.Credentials
 import com.auth0.android.result.UserProfile
 import com.auth0.jwt.algorithms.Algorithm
 import com.example.bec_client.fragment.*
+import com.example.restapi.home.data.model.NotificationModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +50,34 @@ class MainActivity : AppCompatActivity() {
     private val searchFragment = SearchFragment()
     private val trendingFragment = TrendingFragment()
     private val nearbyFragment = NearbyFragment()
+
+    private lateinit  var Listener: NotificationUpdateListener
+    private lateinit var notifManger : NotificationManagerCompat
+    val CHANNEL_ID = "channelID"
+    val CHANNEL_NAME = "channelName"
+    val NOTIF_ID = 0
+    private fun createNotifChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT).apply {
+                lightColor = Color.BLUE
+                enableLights(true)
+            }
+            val manager = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+        }
+    }
+
+
+    public fun sendNotification(notif: String)
+    {
+        val notif = NotificationCompat.Builder(this,CHANNEL_ID)
+            .setSmallIcon(R.drawable.baseline_trending_up_24)
+            .setContentTitle("New BEC notification")
+            .setContentText(notif)
+            .build()
+
+        notifManger.notify(NOTIF_ID,notif)
+    }
 
     companion object {
         var pemCertificate: String? = null
@@ -96,6 +135,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Listener = NotificationUpdateListener(this)
+        createNotifChannel()
+        notifManger= NotificationManagerCompat.from(this)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -138,6 +181,7 @@ class MainActivity : AppCompatActivity() {
             .start(this, object : Callback<Credentials, AuthenticationException> {
                 // Called when there is an authentication failure
                 override fun onFailure(exception: AuthenticationException) {
+                    Listener.stopListening()
                     // Something went wrong!
                 }
 
@@ -154,6 +198,9 @@ class MainActivity : AppCompatActivity() {
                         cachedCredentials!!.idToken, pemCertificate.toString())
 
                     showUserProfile(credentials.accessToken)
+
+                    Listener.userId = userId!!.toLong()
+                    Listener.startListening(10)
                 }
             })
     }
@@ -168,6 +215,7 @@ class MainActivity : AppCompatActivity() {
                     cachedCredentials = null
                     userId = null
                     isAdmin = false
+                    Listener.stopListening()
                 }
 
                 override fun onFailure(error: AuthenticationException) {

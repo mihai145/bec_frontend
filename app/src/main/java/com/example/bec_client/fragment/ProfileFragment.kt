@@ -1,5 +1,6 @@
 package com.example.bec_client.fragment
 
+import NotificationUpdateListener
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,7 +32,6 @@ import java.util.concurrent.TimeUnit
 class ProfileFragment : Fragment() {
     private lateinit var searchViewModel: SearchViewModel
     private lateinit var recyclerAdapter: RecyclerAdapter
-    private var userId: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +52,6 @@ class ProfileFragment : Fragment() {
             recyclerAdapter = RecyclerAdapter()
             adapter = recyclerAdapter
         }
-
 
         return mView
     }
@@ -94,8 +93,6 @@ class ProfileFragment : Fragment() {
                     mainActivity.logout()
                 }
             }
-
-            userId = MainActivity.cachedUserProfile?.getId().toString().split("|")[1].toLong()
 
         }
     }
