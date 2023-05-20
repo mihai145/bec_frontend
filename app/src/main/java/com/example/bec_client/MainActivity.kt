@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var notifManger : NotificationManagerCompat
     val CHANNEL_ID = "channelID"
     val CHANNEL_NAME = "channelName"
-    val NOTIF_ID = 0
+    var NOTIF_ID = 0
     private fun createNotifChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT).apply {
@@ -77,6 +77,7 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         notifManger.notify(NOTIF_ID,notif)
+        NOTIF_ID += 1
     }
 
     companion object {

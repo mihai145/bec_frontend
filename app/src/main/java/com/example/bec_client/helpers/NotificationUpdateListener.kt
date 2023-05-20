@@ -21,6 +21,8 @@ class NotificationUpdateListener(
     private var job: Job? = null
     public var userId: Long? = 0
 
+    private var displayedNotif = mutableSetOf<Long?>()
+
     init  {
         searchViewModel = ViewModelProvider(owner)[SearchViewModel::class.java]
     }
@@ -58,6 +60,7 @@ class NotificationUpdateListener(
         isListening = false
         job?.cancel()
         executor.shutdown()
+        displayedNotif.clear()
         Log.d("DEBUG","Listener stopped.")
     }
 
@@ -70,7 +73,11 @@ class NotificationUpdateListener(
                 val ans = it.results
                     .forEach { notification ->
                         Log.d("DEBUG", "Processing notification: ${notification.message}")
-                        notification.message?.let { it1 -> owner.sendNotification(it1) };
+                        if(displayedNotif.add(notification.notificationId))
+                        {
+                            // Element was not in set
+                            notification.message?.let { it1 -> owner.sendNotification(it1) };
+                        }
                     }
             } else {
                 Log.d("DEBUG POSTS:", "a crapat")
