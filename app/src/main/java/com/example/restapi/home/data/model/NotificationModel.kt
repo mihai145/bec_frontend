@@ -1,4 +1,7 @@
 package com.example.restapi.home.data.model
 
-class NotificationModel {
-}
+import com.google.gson.annotations.SerializedName
+data class NotificationModel (
+    val notificationId: Long,
+    val message: String
+)

@@ -1,6 +1,6 @@
 package com.example.restapi.home.data.model.request
 
-class NotificationReqModel {
+class UserNotificationModel {
     var userId: Int? = 0
 
     constructor(userId: Long) {

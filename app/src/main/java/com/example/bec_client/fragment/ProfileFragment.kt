@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit
 class ProfileFragment : Fragment() {
     private lateinit var searchViewModel: SearchViewModel
     private lateinit var recyclerAdapter: RecyclerAdapter
+    private var userId: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,6 +85,7 @@ class ProfileFragment : Fragment() {
                     mainActivity.loginWithBrowser()
                 }
             }
+
         } else {
             profileInfo?.text = "Hello " + MainActivity.cachedUserProfile?.name
             button?.text = "LOGOUT"
@@ -92,6 +94,9 @@ class ProfileFragment : Fragment() {
                     mainActivity.logout()
                 }
             }
+
+            userId = MainActivity.cachedUserProfile?.getId().toString().split("|")[1].toLong()
+
         }
     }
 

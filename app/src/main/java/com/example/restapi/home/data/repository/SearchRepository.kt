@@ -415,4 +415,28 @@ class SearchRepository {
             })
         return data
     }
+
+    fun getNotification(userId: Long): LiveData<NotificationResponseModel> {
+        val data = MutableLiveData<NotificationResponseModel>()
+        val requestModel = UserNotificationModel(userId)
+        Log.d("Repo", "getNotification $userId")
+        apiInterface?.getNotificationForUser(MainActivity.cachedCredentials?.idToken.toString(),requestModel)?.enqueue(object : Callback<NotificationResponseModel> {
+            override fun onFailure(call: Call<NotificationResponseModel>, t: Throwable) {
+                data.value = null
+            }
+
+            override fun onResponse(
+                call: Call<NotificationResponseModel>,
+                response: Response<NotificationResponseModel>
+            ) {
+                val res = response.body()
+                if (response.code() == 202 && res != null) {
+                    data.value = res
+                } else {
+                    data.value = null
+                }
+            }
+        })
+        return data
+    }
 }
