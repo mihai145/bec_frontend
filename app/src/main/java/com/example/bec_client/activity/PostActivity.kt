@@ -202,8 +202,8 @@ class PostActivity : AppCompatActivity() {
                                     applicationContext,
                                     "Post was liked",
                                     Toast.LENGTH_SHORT
-                                )
-                                    .show()
+                                ).show()
+                                likesCount.text = "You + " + likesCount.text
                             } else {
                                 Toast.makeText(
                                     applicationContext,
@@ -237,8 +237,8 @@ class PostActivity : AppCompatActivity() {
                                     applicationContext,
                                     "Like was deleted",
                                     Toast.LENGTH_SHORT
-                                )
-                                    .show()
+                                ).show()
+                                likesCount.text = likesCount.text.drop(6)
                             } else {
                                 Toast.makeText(
                                     applicationContext,
@@ -305,8 +305,10 @@ class PostActivity : AppCompatActivity() {
         searchViewModel.wasLiked?.observe(this, Observer {
             Log.d("Was Liked", searchViewModel.wasLiked!!.value.toString())
             if (it != null) {
-                if (it == 1)
+                if (it == 1) {
                     likeButton.isChecked = true
+                    likesCount.text = "You + " + likesCount.text
+                }
                 Log.d("Debug Liked", it.toString())
             }
         })
@@ -314,7 +316,10 @@ class PostActivity : AppCompatActivity() {
         searchViewModel.likes?.observe(this, Observer {
             Log.d("Likes", searchViewModel.likes!!.value.toString())
             if (it != null) {
-                likesCount.text = "$it Likes"
+                var real = it
+                if(likeButton.isChecked)
+                    real -= 1
+                likesCount.text = "${likesCount.text}$real Likes"
                 Log.d("Debug Likes", it.toString())
             }
         })

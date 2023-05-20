@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
 import com.example.bec_client.activity.PostFormActivity
-import com.example.bec_client.adapter.RecyclerAdapter
+import com.example.bec_client.adapter.PostAdapter
 import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.viewmodel.SearchViewModel
 
@@ -29,7 +29,7 @@ import com.example.restapi.home.viewmodel.SearchViewModel
  */
 class HomeFragment : Fragment() {
     private lateinit var searchViewModel: SearchViewModel
-    private lateinit var recyclerAdapter: RecyclerAdapter
+    private lateinit var recyclerAdapter: PostAdapter
 
     ////
     private lateinit var reviewButton: Button
@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
                 requireContext(),
                 LinearLayoutManager.VERTICAL, false
             )
-            recyclerAdapter = RecyclerAdapter()
+            recyclerAdapter = PostAdapter()
             adapter = recyclerAdapter
         }
 

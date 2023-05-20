@@ -18,8 +18,8 @@ import com.example.bec_client.MainActivity
 import com.example.bec_client.R
 import com.example.bec_client.activity.*
 import com.example.restapi.home.data.model.CardModel
-import com.example.restapi.home.data.model.request.CommentInfoModel
-import com.example.restapi.home.data.model.request.CommentLikedModel
+import com.example.restapi.home.data.model.request.PostInfoModel
+import com.example.restapi.home.data.model.request.PostLikedModel
 import com.example.restapi.home.data.model.response.LikeResponseModel
 import com.example.restapi.home.data.model.response.SimpleResponseModel
 import com.example.restapi.network.ApiClient
@@ -29,13 +29,13 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class CommentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class PostAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items: ArrayList<CardModel> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val lifeCycleOwner = parent.context as LifecycleOwner
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.comment_layout, parent, false),
+            LayoutInflater.from(parent.context).inflate(R.layout.post_layout, parent, false),
             parent.context,
             lifeCycleOwner
         )
@@ -91,10 +91,10 @@ class CommentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             lifecycleOwner = lifeCycleOwner
         }
 
-        fun wasLikedComment(commentId: Long, userId: Long): LiveData<Int> {
+        fun wasLikedPost(postId: Long, userId: Long): LiveData<Int> {
             val data = MutableLiveData<Int>()
-            val requestModel = CommentLikedModel(commentId, userId)
-            apiInterface?.wasLikedComment(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+            val requestModel = PostLikedModel(postId, userId)
+            apiInterface?.wasLikedPost(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
                 ?.enqueue(object : Callback<LikeResponseModel> {
                     override fun onFailure(call: Call<LikeResponseModel>, t: Throwable) {
                         data.value = null
@@ -116,10 +116,10 @@ class CommentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             return data
         }
 
-        fun getLikesComment(commentId: Long): LiveData<Int> {
+        fun getLikesPost(postId: Long): LiveData<Int> {
             val data = MutableLiveData<Int>()
-            val requestModel = CommentInfoModel(commentId)
-            apiInterface?.getLikesComment(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+            val requestModel = PostInfoModel(postId)
+            apiInterface?.getLikesPost(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
                 ?.enqueue(object : Callback<LikeResponseModel> {
                     override fun onFailure(call: Call<LikeResponseModel>, t: Throwable) {
                         data.value = null
@@ -153,8 +153,8 @@ class CommentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 .error(R.drawable.ic_launcher_background)
             var wasLiked :  LiveData<Int>? = null
             var likes : LiveData<Int>? = null
-            wasLiked = wasLikedComment(id, MainActivity.userId?.toLong() ?: -1L)
-            likes = getLikesComment(id)
+            wasLiked = wasLikedPost(id, MainActivity.userId?.toLong() ?: -1L)
+            likes = getLikesPost(id)
 
 
             wasLiked?.observe(lifecycleOwner, Observer {
@@ -190,9 +190,9 @@ class CommentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             body.text = card.body
 
             likeButton.setOnClickListener {
-                val requestModel = CommentLikedModel(id, MainActivity.userId?.toLong() ?: -1L)
+                val requestModel = PostLikedModel(id, MainActivity.userId?.toLong() ?: -1L)
                 if(likeButton.isChecked) {
-                    apiInterface?.likeComment(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+                    apiInterface?.likePost(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
                         ?.enqueue(object : Callback<SimpleResponseModel> {
                             override fun onResponse(
                                 call: Call<SimpleResponseModel>,
@@ -200,7 +200,7 @@ class CommentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             ) {
                                 val res = response.body()
                                 if (response.code() == 202 && res != null && res.ok) {
-                                    Toast.makeText(applicationContext, "Comment was liked", Toast.LENGTH_SHORT)
+                                    Toast.makeText(applicationContext, "Post was liked", Toast.LENGTH_SHORT)
                                         .show()
                                     likesCount.text = "You + " + likesCount.text
                                     Log.d("New number likes", likes.toString())
@@ -222,7 +222,7 @@ class CommentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                             }
                         })
                 } else {
-                    apiInterface?.deleteLikeComment(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+                    apiInterface?.deleteLikePost(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
                         ?.enqueue(object : Callback<SimpleResponseModel> {
                             override fun onResponse(
                                 call: Call<SimpleResponseModel>,
@@ -257,18 +257,12 @@ class CommentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 var intent: Intent
 
                 when (card.type) {
-                    5 -> intent = Intent(itemView.context, CommentFormActivity::class.java)
+                    4 -> intent = Intent(itemView.context, PostActivity::class.java)
                     else -> {
                         throw Exception("BAD CARD TYPE")
                     }
                 }
                 intent.putExtra("id", card.id)
-                if (card.type == 5) {
-                    intent.putExtra("newOrEdit", 1L)
-                    intent.putExtra("content", card.body)
-                    intent.putExtra("postId", card.postId)
-                    intent.putExtra("userId", card.userId)
-                }
                 itemView.context.startActivity(intent)
             }
         }

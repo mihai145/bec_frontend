@@ -18,9 +18,25 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items: ArrayList<CardModel> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        when (viewType) {
+            0 -> return ViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
+            )
+            1 -> return ViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.user_layout, parent, false)
+            )
+        }
         return ViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
         )
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if(items.get(position).type == 3) {
+            1
+        } else {
+            0
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
