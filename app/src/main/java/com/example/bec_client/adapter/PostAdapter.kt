@@ -155,6 +155,7 @@ class PostAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             var likes : LiveData<Int>? = null
             wasLiked = wasLikedPost(id, MainActivity.userId?.toLong() ?: -1L)
             likes = getLikesPost(id)
+            likesCount.text = ""
 
 
             wasLiked?.observe(lifecycleOwner, Observer {
@@ -163,6 +164,8 @@ class PostAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     if (it == 1) {
                         likeButton.isChecked = true
                         likesCount.text = "You + " + likesCount.text
+                    } else {
+                        likeButton.isChecked = false
                     }
                     Log.d("Debug Liked", it.toString())
                 }
@@ -173,6 +176,7 @@ class PostAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     var real = it
                     if(likeButton.isChecked)
                         real -= 1
+                    Log.d("likeCount content before:", likesCount.text.toString())
                     likesCount.text = "${likesCount.text}$real Likes"
                     Log.d("Debug Likes", it.toString())
                 }

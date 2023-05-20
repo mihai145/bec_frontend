@@ -155,6 +155,7 @@ class CommentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             var likes : LiveData<Int>? = null
             wasLiked = wasLikedComment(id, MainActivity.userId?.toLong() ?: -1L)
             likes = getLikesComment(id)
+            likesCount.text = ""
 
 
             wasLiked?.observe(lifecycleOwner, Observer {
@@ -163,6 +164,8 @@ class CommentAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     if (it == 1) {
                         likeButton.isChecked = true
                         likesCount.text = "You + " + likesCount.text
+                    } else {
+                        likeButton.isChecked = false
                     }
                     Log.d("Debug Liked", it.toString())
                 }

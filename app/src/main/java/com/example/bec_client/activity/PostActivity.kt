@@ -54,6 +54,9 @@ class PostActivity : AppCompatActivity() {
 
     override fun onResume() {
         id = intent.getLongExtra("id", -1)
+        searchViewModel.wasLikedPost(id, MainActivity.userId?.toLong() ?: -1L)
+        searchViewModel.getLikesPost(id)
+        likesCount.text = ""
         feedData(id)
         super.onResume()
         if (pressed) {
@@ -292,7 +295,14 @@ class PostActivity : AppCompatActivity() {
             adapter = recyclerAdapter
         }
 
-        feedData(id)
+    }
+
+    private fun feedData(id: Long) {
+        // populate recycler
+        if (MainActivity.cachedCredentials != null) {
+            recyclerAdapter.resetAdapter()
+            searchViewModel.getComments(id)
+        }
         searchViewModel.commentsLiveData?.observe(this, Observer {
             if (it != null) {
                 recyclerAdapter.submitList(it.comments.map { x -> CardModel(x) })
@@ -308,6 +318,8 @@ class PostActivity : AppCompatActivity() {
                 if (it == 1) {
                     likeButton.isChecked = true
                     likesCount.text = "You + " + likesCount.text
+                } else {
+                    likeButton.isChecked = false
                 }
                 Log.d("Debug Liked", it.toString())
             }
@@ -323,13 +335,5 @@ class PostActivity : AppCompatActivity() {
                 Log.d("Debug Likes", it.toString())
             }
         })
-    }
-
-    private fun feedData(id: Long) {
-        // populate recycler
-        if (MainActivity.cachedCredentials != null) {
-            recyclerAdapter.resetAdapter()
-            searchViewModel.getComments(id)
-        }
     }
 }
