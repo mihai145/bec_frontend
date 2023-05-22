@@ -26,9 +26,9 @@ class ActorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_actor)
 
-        actorName = findViewById(R.id.actor_name)
-        actorBiography = findViewById(R.id.actor_biography)
-        actorImage = findViewById(R.id.actor_image)
+        actorName = findViewById(R.id.actorName)
+        actorBiography = findViewById(R.id.actorBiography)
+        actorImage = findViewById(R.id.actorImage)
 
         id = intent.getLongExtra("id", -1)
         if (id == -1L)

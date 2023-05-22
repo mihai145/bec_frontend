@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
+import com.example.bec_client.adapter.LeaderboardAdapter
 import com.example.bec_client.adapter.RecyclerAdapter
 import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.viewmodel.SearchViewModel
@@ -30,7 +31,7 @@ import java.util.concurrent.TimeUnit
  */
 class ProfileFragment : Fragment() {
     private lateinit var searchViewModel: SearchViewModel
-    private lateinit var recyclerAdapter: RecyclerAdapter
+    private lateinit var recyclerAdapter: LeaderboardAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,13 +43,13 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val mView: View = inflater.inflate(R.layout.fragment_profile, container, false)
-        val recyclerView: RecyclerView = mView.findViewById(R.id.recycler_view)
+        val recyclerView: RecyclerView = mView.findViewById(R.id.recyclerView)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.VERTICAL, false
             )
-            recyclerAdapter = RecyclerAdapter()
+            recyclerAdapter = LeaderboardAdapter()
             adapter = recyclerAdapter
         }
 
@@ -71,8 +72,8 @@ class ProfileFragment : Fragment() {
     }
 
     fun setupProfileFragment() {
-        val profileInfo: TextView? = view?.findViewById(R.id.profile_text_view)
-        val button: Button? = view?.findViewById(R.id.login_logout_button)
+        val profileInfo: TextView? = view?.findViewById(R.id.profileTextView)
+        val button: Button? = view?.findViewById(R.id.loginLogoutButton)
 
         val mainActivity = activity as? MainActivity
 
@@ -101,7 +102,7 @@ class ProfileFragment : Fragment() {
 
         // this will have to change later... we will add the id token to all requests to the backend
         val amIAuthenticatedButton: Button? =
-            getView()?.findViewById(R.id.am_i_authenticated_button)
+            getView()?.findViewById(R.id.amIAuthenticatedButton)
         amIAuthenticatedButton?.setOnClickListener {
             val executor = Executors.newSingleThreadExecutor()
             executor.execute {

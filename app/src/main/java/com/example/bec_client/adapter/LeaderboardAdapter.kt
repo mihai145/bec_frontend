@@ -1,11 +1,13 @@
 package com.example.bec_client.adapter
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -14,34 +16,20 @@ import com.example.bec_client.activity.*
 import com.example.restapi.home.data.model.CardModel
 
 
-class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class LeaderboardAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items: ArrayList<CardModel> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        when (viewType) {
-            0 -> return ViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
-            )
-            1 -> return ViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.user_layout, parent, false)
-            )
-        }
+        val lifeCycleOwner = parent.context as LifecycleOwner
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.leaderboard_layout, parent, false),
+            parent.context,
+            lifeCycleOwner
         )
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return if(items.get(position).type == 3) {
-            1
-        } else {
-            0
-        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-
             is ViewHolder -> {
                 holder.bind(items.get(position))
             }
@@ -68,22 +56,26 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View, context: Context, lifeCycleOwner: LifecycleOwner) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView
         val title: TextView
-        val body: TextView
+        val likes: TextView
+        val applicationContext : Context
+        val lifecycleOwner : LifecycleOwner
 
         init {
             image = itemView.findViewById(R.id.image)
             title = itemView.findViewById(R.id.title)
-            body = itemView.findViewById(R.id.body)
+            likes = itemView.findViewById(R.id.likes)
+            applicationContext = context
+            lifecycleOwner = lifeCycleOwner
         }
 
         fun bind(card: CardModel) {
-
             val requestOptions = RequestOptions()
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.drawable.ic_launcher_background)
+
 
             if (card.imagePath != null) {
                 Glide.with(itemView.context)
@@ -93,17 +85,21 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
 
             title.text = card.title
-            body.text = card.body
+            likes.text = card.body
+
+            when (card.place) {
+                1L -> image.setImageResource(R.drawable.baseline_filter_1_24)
+                2L -> image.setImageResource(R.drawable.baseline_filter_2_24)
+                3L -> image.setImageResource(R.drawable.baseline_filter_3_24)
+                4L -> image.setImageResource(R.drawable.baseline_filter_4_24)
+                5L -> image.setImageResource(R.drawable.baseline_filter_5_24)
+            }
 
             itemView.setOnClickListener {
                 var intent: Intent
 
                 when (card.type) {
-                    1 -> intent = Intent(itemView.context, MovieActivity::class.java)
-                    2 -> intent = Intent(itemView.context, ActorActivity::class.java)
                     3 -> intent = Intent(itemView.context, UserActivity::class.java)
-                    4 -> intent = Intent(itemView.context, PostActivity::class.java)
-                    5 -> intent = Intent(itemView.context, CommentFormActivity::class.java)
                     else -> {
                         throw Exception("BAD CARD TYPE")
                     }
@@ -111,12 +107,6 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 intent.putExtra("id", card.id)
                 if (card.type == 3) {
                     intent.putExtra("nickname", card.title)
-                }
-                if (card.type == 5) {
-                    intent.putExtra("newOrEdit", 1L)
-                    intent.putExtra("content", card.body)
-                    intent.putExtra("postId", card.postId)
-                    intent.putExtra("userId", card.userId)
                 }
                 itemView.context.startActivity(intent)
             }

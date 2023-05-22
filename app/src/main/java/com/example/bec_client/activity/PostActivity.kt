@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
-import com.example.bec_client.adapter.RecyclerAdapter
+import com.example.bec_client.adapter.CommentAdapter
 import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.data.model.PostModel
 import com.example.restapi.home.data.model.request.PostInfoModel
@@ -31,7 +31,7 @@ class PostActivity : AppCompatActivity() {
     private var id: Long = 0
 
     private lateinit var searchViewModel: SearchViewModel
-    private lateinit var recyclerAdapter: RecyclerAdapter
+    private lateinit var recyclerAdapter: CommentAdapter
     private lateinit var post: PostModel
 
     private lateinit var postTitle: TextView
@@ -54,6 +54,9 @@ class PostActivity : AppCompatActivity() {
 
     override fun onResume() {
         id = intent.getLongExtra("id", -1)
+        searchViewModel.wasLikedPost(id, MainActivity.userId?.toLong() ?: -1L)
+        searchViewModel.getLikesPost(id)
+        likesCount.text = ""
         feedData(id)
         super.onResume()
         if (pressed) {
@@ -202,8 +205,8 @@ class PostActivity : AppCompatActivity() {
                                     applicationContext,
                                     "Post was liked",
                                     Toast.LENGTH_SHORT
-                                )
-                                    .show()
+                                ).show()
+                                likesCount.text = "You + " + likesCount.text
                             } else {
                                 Toast.makeText(
                                     applicationContext,
@@ -237,8 +240,8 @@ class PostActivity : AppCompatActivity() {
                                     applicationContext,
                                     "Like was deleted",
                                     Toast.LENGTH_SHORT
-                                )
-                                    .show()
+                                ).show()
+                                likesCount.text = likesCount.text.drop(6)
                             } else {
                                 Toast.makeText(
                                     applicationContext,
@@ -283,12 +286,12 @@ class PostActivity : AppCompatActivity() {
             }
         })
 
-        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(
                 rootView.context, LinearLayoutManager.VERTICAL, false
             )
-            recyclerAdapter = RecyclerAdapter()
+            recyclerAdapter = CommentAdapter()
             adapter = recyclerAdapter
         }
 
@@ -312,8 +315,12 @@ class PostActivity : AppCompatActivity() {
         searchViewModel.wasLiked?.observe(this, Observer {
             Log.d("Was Liked", searchViewModel.wasLiked!!.value.toString())
             if (it != null) {
-                if (it == 1)
+                if (it == 1) {
                     likeButton.isChecked = true
+                    likesCount.text = "You + " + likesCount.text
+                } else {
+                    likeButton.isChecked = false
+                }
                 Log.d("Debug Liked", it.toString())
             }
         })
@@ -321,7 +328,10 @@ class PostActivity : AppCompatActivity() {
         searchViewModel.likes?.observe(this, Observer {
             Log.d("Likes", searchViewModel.likes!!.value.toString())
             if (it != null) {
-                likesCount.text = "$it Likes"
+                var real = it
+                if(likeButton.isChecked)
+                    real -= 1
+                likesCount.text = "${likesCount.text}$real Likes"
                 Log.d("Debug Likes", it.toString())
             }
         })

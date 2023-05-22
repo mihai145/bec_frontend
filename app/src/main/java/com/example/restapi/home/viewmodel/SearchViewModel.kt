@@ -78,12 +78,4 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     fun getLikesPost(postId: Long) {
         likes = searchRepository?.getLikesPost(postId)
     }
-
-    fun wasLikedComment(commentId: Long, userId: Long) {
-        wasLiked = searchRepository?.wasLikedComment(commentId, userId)
-    }
-
-    fun getLikesComment(commentId: Long) {
-        likes = searchRepository?.getLikesComment(commentId)
-    }
 }

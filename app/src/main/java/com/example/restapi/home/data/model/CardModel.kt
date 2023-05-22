@@ -8,6 +8,7 @@ class CardModel {
     var type: Int? = 0
     var postId: Long? = 0
     var userId: Long? = 0
+    var place: Long? = 0
 
     constructor(movie: MovieModel) {
         imagePath = movie.posterPath
@@ -52,8 +53,9 @@ class CardModel {
 
     constructor(user: LeaderboardModel) {
         title = user.nickname
-        body = "User " + user.nickname + " has " + user.totalLikes + " likes"
+        body = user.totalLikes.toString() + " likes"
         id = user.id
+        place = user.place
         type = 3
     }
 }

@@ -57,7 +57,7 @@ class UserActivity : AppCompatActivity() {
         val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
         searchViewModel.userFollowInfo(userId.toLong(), id)
 
-        followButton = findViewById(R.id.follow_button)
+        followButton = findViewById(R.id.followButton)
         followButton.setOnClickListener {
             if (followButton.text != "LOADING") {
                 if (MainActivity.cachedCredentials == null) {
@@ -155,7 +155,7 @@ class UserActivity : AppCompatActivity() {
             }
         }
 
-        deleteButton = findViewById(R.id.delete_user_button)
+        deleteButton = findViewById(R.id.deleteUserButton)
         deleteButton.setOnClickListener {
             if (MainActivity.cachedCredentials == null) {
                 Toast.makeText(this, "You need to be logged in to do that", Toast.LENGTH_SHORT)
