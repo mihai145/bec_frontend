@@ -20,6 +20,7 @@ class NotificationUpdateListener(
     private val executor = Executors.newSingleThreadScheduledExecutor()
     private var job: Job? = null
     public var userId: Long? = 0
+    private final var MAX_NOTIFY = 5
 
     private var displayedNotif = mutableSetOf<Long?>()
     init  {
@@ -78,7 +79,7 @@ class NotificationUpdateListener(
                 val ans = it.results
                     .forEach { notification ->
                         Log.d("DEBUG", "Processing notification: ${notification.message}")
-                        if(displayedNotif.add(notification.notificationId))
+                        if(displayedNotif.size < MAX_NOTIFY && displayedNotif.add(notification.notificationId))
                         {
                             // Element was not in set
                             owner.sendNotification(notification.notificationId!!.toInt(),notification.message!!)
