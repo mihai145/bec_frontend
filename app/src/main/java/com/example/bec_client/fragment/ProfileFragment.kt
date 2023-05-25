@@ -108,7 +108,7 @@ class ProfileFragment : Fragment() {
             val executor = Executors.newSingleThreadExecutor()
             executor.execute {
                 try {
-                    val myURL = URL("https://teambec.live/amILoggedIn")
+                    val myURL = URL("https://teambec.life/amILoggedIn")
                     val myURLConnection: HttpURLConnection =
                         myURL.openConnection() as HttpURLConnection
 
