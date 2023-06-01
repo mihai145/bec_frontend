@@ -59,6 +59,7 @@ class ProfileFragment : Fragment() {
 
     fun feedData() {
         // populate recycler
+        Log.d("FeedData", "FeedData")
         recyclerAdapter.resetAdapter()
         searchViewModel.getLeaderboard()
         searchViewModel.leaderboardLiveData?.observe(viewLifecycleOwner, Observer {
@@ -107,7 +108,7 @@ class ProfileFragment : Fragment() {
             val executor = Executors.newSingleThreadExecutor()
             executor.execute {
                 try {
-                    val myURL = URL("https://teambec.live/amILoggedIn")
+                    val myURL = URL("https://teambec.life/amILoggedIn")
                     val myURLConnection: HttpURLConnection =
                         myURL.openConnection() as HttpURLConnection
 
@@ -143,7 +144,7 @@ class ProfileFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        feedData()
+        //feedData()
         setupProfileFragment()
     }
 

@@ -29,7 +29,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/profileTextView"
-            android:text="LOGIN" />
+            android:text="LOGIN"
+            android:theme="@style/Theme.MaterialComponents.Light"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/amIAuthenticatedButton"
@@ -38,7 +39,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginLogoutButton"
-            android:text="AM I AUTHENTICATED?" />
+            android:text="AM I AUTHENTICATED?"
+            android:theme="@style/Theme.MaterialComponents.Light"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
