@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
 import com.example.bec_client.activity.PostFormActivity
+import com.example.bec_client.activity.RecommendActivity
 import com.example.bec_client.adapter.PostAdapter
 import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.viewmodel.SearchViewModel
@@ -34,6 +35,7 @@ class HomeFragment : Fragment() {
     private lateinit var swipeContainer: SwipeRefreshLayout
     ////
     private lateinit var reviewButton: Button
+    private lateinit var recommendButton: Button
     ////
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,6 +89,23 @@ class HomeFragment : Fragment() {
             }
         }
         /////
+
+        recommendButton = mView.findViewById(R.id.recommendButton)
+        recommendButton.setOnClickListener {
+            if (recommendButton.text != "LOADING") {
+                if (MainActivity.cachedCredentials == null) {
+                    Toast.makeText(
+                        mView.context,
+                        "You need to be logged in to do that",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                } else {
+                    val intent = Intent(mView.context, RecommendActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        }
 
         return mView
     }
