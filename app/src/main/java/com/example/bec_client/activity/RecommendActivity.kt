@@ -16,22 +16,35 @@ import com.example.bec_client.R
 import com.example.bec_client.adapter.RecyclerAdapter
 import com.example.bec_client.manager.PreferencesManager
 import com.example.restapi.home.data.model.CardModel
+import com.example.restapi.home.viewmodel.GptViewModel
 import com.example.restapi.home.viewmodel.SearchViewModel
 import java.util.stream.Collectors.toList
 
 class RecommendActivity : AppCompatActivity() {
     private lateinit var searchViewModel: SearchViewModel
+    private lateinit var gptViewModel: GptViewModel
     private lateinit var recyclerAdapter: RecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recommend)
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
+        gptViewModel = ViewModelProvider(this)[GptViewModel::class.java]
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerAdapter = RecyclerAdapter()
         recyclerView.adapter = recyclerAdapter
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
-        PreferencesManager.getPreferences().asSequence().forEach { Log.d("Debug", it) }
+
+        Log.d("Preferences",PreferencesManager.getPreferences().toString())
+        gptViewModel.askGpt(PreferencesManager.getPreferences().toList())
+        gptViewModel.preferencesLiveData?.observe(this, Observer {
+            if (it != null) {
+                it.results.forEach{x -> loadMovie(x)}
+                Log.d("Debug", it.toString())
+            } else {
+                Log.d("DEBUG: ", "a crapat")
+            }
+        })
     }
 
     private fun loadMovie(name: String)

@@ -163,4 +163,9 @@ interface ApiInterface {
         @Header("Bearer") token: String,
         @Body postInfo: CommentLikedModel
     ): Call<SimpleResponseModel>
+
+    @POST("askGPT")
+    fun askGPT(
+        @Body gptRequestModel: GptRequestModel
+    ): Call<GptResponseModel>
 }
