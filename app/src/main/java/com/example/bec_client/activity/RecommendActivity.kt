@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bec_client.R
 import com.example.bec_client.adapter.RecyclerAdapter
+import com.example.bec_client.manager.PreferencesManager
 import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.viewmodel.SearchViewModel
 import java.util.stream.Collectors.toList
@@ -30,6 +31,7 @@ class RecommendActivity : AppCompatActivity() {
         recyclerAdapter = RecyclerAdapter()
         recyclerView.adapter = recyclerAdapter
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+        PreferencesManager.getPreferences().asSequence().forEach { Log.d("Debug", it) }
     }
 
     private fun loadMovie(name: String)

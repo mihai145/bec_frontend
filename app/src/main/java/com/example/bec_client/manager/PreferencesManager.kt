@@ -1,22 +1,19 @@
 package com.example.bec_client.manager
 
-class PreferrencesManager private constructor() {
-    var instance: PreferrencesManager? = null
-        get() {
-            if (field == null) field = PreferrencesManager()
-            return field
-        }
-        private set
-    private val preferences: MutableList<String> = ArrayList()
-    fun prefer(title: String) {
-        preferences.add(title)
+object PreferencesManager {
+    private val preferences: MutableSet<String> = HashSet()
+
+    fun prefer(title: String?) {
+        if(title != null)
+            preferences.add(title)
     }
 
-    fun removePreference(title: String) {
-        preferences.remove(title)
+    fun removePreference(title: String?) {
+        if(title != null)
+            preferences.remove(title)
     }
 
-    fun getPreferences(): List<String> {
+    fun getPreferences(): Set<String> {
         return preferences
     }
 }

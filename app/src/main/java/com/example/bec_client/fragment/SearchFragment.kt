@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bec_client.R
 import com.example.bec_client.adapter.RecyclerAdapter
+import com.example.bec_client.manager.PreferencesManager
 import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.viewmodel.SearchViewModel
 
@@ -31,7 +32,7 @@ class SearchFragment : Fragment() {
         searchViewModel.searchMoviesByName(query)
         searchViewModel.searchUser(query)
         searchViewModel.searchActorByName(query)
-
+        PreferencesManager.prefer(query)
 
         searchViewModel.searchedMoviesLiveData?.observe(this, Observer {
             if (it != null) {
