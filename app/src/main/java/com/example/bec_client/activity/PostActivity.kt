@@ -76,7 +76,7 @@ class PostActivity : AppCompatActivity() {
                             val mvName = post.movieName
                             movieName.text = "Movie: $mvName"
                         } else {
-                            movieName.text = "Normal Post, does not reffer to any movie"
+                            movieName.text = "none"
                         }
                     } else {
                         Toast.makeText(this, "Post data not available", Toast.LENGTH_SHORT).show()
@@ -275,7 +275,7 @@ class PostActivity : AppCompatActivity() {
                         val mvName = post.movieName
                         movieName.text = "Movie: $mvName"
                     } else {
-                        movieName.text = "Normal Post, does not reffer to any movie"
+                        movieName.text = "none"
                     }
                 } else {
                     Toast.makeText(this, "Post data not available", Toast.LENGTH_SHORT).show()
@@ -331,7 +331,7 @@ class PostActivity : AppCompatActivity() {
                 var real = it
                 if(likeButton.isChecked)
                     real -= 1
-                likesCount.text = "${likesCount.text}$real Likes"
+                likesCount.text = "${likesCount.text}$real"
                 Log.d("Debug Likes", it.toString())
             }
         })
