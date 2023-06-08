@@ -76,7 +76,7 @@ class PostActivity : AppCompatActivity() {
                             val mvName = post.movieName
                             movieName.text = "Movie: $mvName"
                         } else {
-                            movieName.text = "none"
+                            movieName.text = "no movie"
                         }
                     } else {
                         Toast.makeText(this, "Post data not available", Toast.LENGTH_SHORT).show()
@@ -275,7 +275,7 @@ class PostActivity : AppCompatActivity() {
                         val mvName = post.movieName
                         movieName.text = "Movie: $mvName"
                     } else {
-                        movieName.text = "none"
+                        movieName.text = "no movie"
                     }
                 } else {
                     Toast.makeText(this, "Post data not available", Toast.LENGTH_SHORT).show()
