@@ -82,7 +82,10 @@ class NotificationUpdateListener(
                         if(displayedNotif.size < MAX_NOTIFY && displayedNotif.add(notification.notificationId))
                         {
                             // Element was not in set
-                            owner.sendNotification(notification.notificationId!!.toInt(),notification.message!!)
+                            owner.sendNotification(notification.notificationId!!.toInt(),
+                                notification.message!!,
+                                notification.postId!!.toInt()
+                            )
                         }
                     }
             } else {

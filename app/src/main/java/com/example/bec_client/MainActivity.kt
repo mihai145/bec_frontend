@@ -3,7 +3,10 @@ package com.example.bec_client
 import NotificationUpdateListener
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -24,6 +27,7 @@ import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import com.auth0.android.result.UserProfile
 import com.auth0.jwt.algorithms.Algorithm
+import com.example.bec_client.activity.PostActivity
 import com.example.bec_client.fragment.*
 import com.example.restapi.home.data.model.NotificationModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -67,9 +71,18 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    public fun sendNotification(notificationId: Int,notif: String)
+    public fun sendNotification(notificationId: Int,notif: String,postId: Int)
     {
+        intent = Intent(this, PostActivity::class.java)
+        intent.putExtra("id", postId.toLong())
+
+        val resultPendingIntent: PendingIntent? = TaskStackBuilder.create(this).run {
+            addNextIntentWithParentStack(intent)
+            getPendingIntent(0,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        }
         val notif = NotificationCompat.Builder(this,CHANNEL_ID)
+            .apply { setContentIntent(resultPendingIntent) }
             .setSmallIcon(R.drawable.baseline_trending_up_24)
             .setContentTitle("New BEC notification")
             .setContentText(notif)
