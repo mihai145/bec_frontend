@@ -143,8 +143,6 @@ class ProfileFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        feedData()
-        setupProfileFragment()
     }
 
     override fun onResume() {
