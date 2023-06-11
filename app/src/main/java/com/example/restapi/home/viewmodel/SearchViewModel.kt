@@ -19,6 +19,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     var postInfoLiveData: LiveData<PostInfoResponseModel>? = null
     var postsLiveData: LiveData<PostsResponseModel>? = null
     var commentsLiveData: LiveData<CommentsResponseModel>? = null
+    var userPostsLiveData: LiveData<PostsResponseModel>? = null
     var leaderboardLiveData: LiveData<LeaderboardResponseModel>? = null
     var likes: LiveData<Int>? = null
     var wasLiked: LiveData<Int>? = null
@@ -29,6 +30,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         searchedActorsLiveData = MutableLiveData()
         movieInfoLiveData = MutableLiveData()
         postsLiveData = MutableLiveData()
+        userPostsLiveData = MutableLiveData()
     }
 
     fun searchUser(nickname: String) {
@@ -59,8 +61,12 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         postInfoLiveData = searchRepository?.postInfo(postId)
     }
 
-    fun getPosts() {
-        postsLiveData = searchRepository?.getPosts()
+    fun getPosts(userId: Long) {
+        postsLiveData = searchRepository?.getPosts(userId)
+    }
+
+    fun getUserPosts(userId: Long) {
+        userPostsLiveData = searchRepository?.getUserPosts(userId)
     }
 
     fun getComments(postId: Long) {

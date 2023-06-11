@@ -240,10 +240,11 @@ class SearchRepository {
         return data
     }
 
-    fun getPosts(): LiveData<PostsResponseModel> {
+    fun getPosts(userId: Long): LiveData<PostsResponseModel> {
         val data = MutableLiveData<PostsResponseModel>()
+        val requestModel = UserDeleteModel(userId.toInt())
 
-        apiInterface?.posts(MainActivity.cachedCredentials?.idToken.toString())
+        apiInterface?.posts(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
             ?.enqueue(object : Callback<PostsResponseModel> {
                 override fun onFailure(call: Call<PostsResponseModel>, t: Throwable) {
                     data.value = null
@@ -363,6 +364,32 @@ class SearchRepository {
                     }
                 }
             })
+        return data
+    }
+
+    fun getUserPosts(userId: Long): LiveData<PostsResponseModel>? {
+        val data = MutableLiveData<PostsResponseModel>()
+        val requestModel = UserDeleteModel(userId.toInt())
+
+        apiInterface?.getUserPosts(MainActivity.cachedCredentials?.idToken.toString(), requestModel)
+            ?.enqueue(object : Callback<PostsResponseModel> {
+                override fun onFailure(call: Call<PostsResponseModel>, t: Throwable) {
+                    data.value = null
+                }
+
+                override fun onResponse(
+                    call: Call<PostsResponseModel>,
+                    response: Response<PostsResponseModel>
+                ) {
+                    val res = response.body()
+                    if (response.code() == 202 && res != null && res.ok == true) {
+                        data.value = res
+                    } else {
+                        data.value = null
+                    }
+                }
+            })
+
         return data
     }
 

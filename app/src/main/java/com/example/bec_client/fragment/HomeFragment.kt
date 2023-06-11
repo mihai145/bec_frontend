@@ -121,7 +121,7 @@ class HomeFragment : Fragment() {
         // populate recycler
         if (MainActivity.cachedCredentials != null) {
             recyclerAdapter.resetAdapter()
-            searchViewModel.getPosts()
+            searchViewModel.getPosts(MainActivity.userId!!.toLong())
         }
         searchViewModel.postsLiveData?.observe(viewLifecycleOwner, Observer {
             if (it != null) {

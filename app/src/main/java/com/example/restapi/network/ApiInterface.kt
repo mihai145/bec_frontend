@@ -102,8 +102,11 @@ interface ApiInterface {
         @Body postInfo: PostInfoModel
     ): Call<SimpleResponseModel>
 
-    @GET("posts")
-    fun posts(@Header("Bearer") token: String): Call<PostsResponseModel>
+    @POST("posts")
+    fun posts(@Header("Bearer") token: String, @Body userId: UserDeleteModel): Call<PostsResponseModel>
+
+    @POST("userPosts")
+    fun getUserPosts(@Header("Bearer") token: String, @Body userId: UserDeleteModel): Call<PostsResponseModel>
 
     @GET("genres")
     fun getGenres(): Call<GenreResponseModel>
