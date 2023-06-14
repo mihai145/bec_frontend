@@ -81,7 +81,7 @@ class HomeFragment : Fragment() {
                     //intent.putExtra("userId", userId)
                     intent.putExtra("newOrEdit", 0L)
                     intent.putExtra("movieId", -1L)
-                    intent.putExtra("movieName", "Normal Post, does not reffer to any movie")
+                    intent.putExtra("movieName", "no movie")
                     intent.putExtra("title", "")
                     intent.putExtra("content", "")
                     startActivity(intent)

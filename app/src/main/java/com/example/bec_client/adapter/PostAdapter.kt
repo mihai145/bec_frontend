@@ -71,7 +71,6 @@ class PostAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     class ViewHolder(itemView: View, context: Context, lifeCycleOwner: LifecycleOwner) : RecyclerView.ViewHolder(itemView) {
-        val image: ImageView
         val title: TextView
         val body: TextView
         val likesCount: TextView
@@ -82,7 +81,6 @@ class PostAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val lifecycleOwner : LifecycleOwner
 
         init {
-            image = itemView.findViewById(R.id.image)
             title = itemView.findViewById(R.id.title)
             body = itemView.findViewById(R.id.body)
             likeButton = itemView.findViewById(R.id.likeButton)
@@ -178,18 +176,11 @@ class PostAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     if(likeButton.isChecked)
                         real -= 1
                     Log.d("likeCount content before:", likesCount.text.toString())
-                    likesCount.text = "${likesCount.text}$real Likes"
+                    likesCount.text = "${likesCount.text}$real"
                     Log.d("Debug Likes", it.toString())
                 }
             })
 
-
-            if (card.imagePath != null) {
-                Glide.with(itemView.context)
-                    .applyDefaultRequestOptions(requestOptions)
-                    .load(card.imagePath)
-                    .into(image)
-            }
 
             title.text = card.title
             body.text = card.body

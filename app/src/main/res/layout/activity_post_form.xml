@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/movieNameTextView"
         android:textStyle="bold"
 
         />
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:text="movieName"
         android:id="@+id/movieNameTextView"
-        app:layout_constraintTop_toBottomOf="@id/newPostTitle"
+        app:layout_constraintBottom_toTopOf="@id/titleEditText"
         android:gravity="start"
         android:textSize="30sp"
 
@@ -34,13 +34,14 @@
         android:id="@+id/titleEditText"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@id/contentEditText"
         android:hint="Title" />
 
     <EditText
         android:id="@+id/contentEditText"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="280dp"
         app:layout_constraintBottom_toTopOf="@id/submitButton"
         android:hint="Content" />
 
@@ -50,6 +51,7 @@
             android:text="SUBMIT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:padding="10sp"

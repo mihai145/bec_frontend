@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="10dp"
-    app:cardCornerRadius="2dp"
+    android:layout_marginBottom="3dp"
     app:cardPreventCornerOverlap="false"
     >
 
@@ -55,13 +54,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Title"
-                    android:textColor="#000"
                     android:textSize="19sp" />
 
                 <TextView
                     android:id="@+id/body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLines="6"
+                    android:ellipsize="end"
                     android:layout_marginTop="10dp"
                     android:text="body"
                     android:textSize="15sp" />
