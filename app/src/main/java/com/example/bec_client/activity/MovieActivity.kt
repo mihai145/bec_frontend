@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
+import com.example.bec_client.manager.PreferencesManager
 import com.example.restapi.home.data.model.MovieModel
 import com.example.restapi.home.data.model.request.DidReviewModel
 import com.example.restapi.home.data.model.response.DidReviewResponseModel
@@ -114,6 +115,7 @@ class MovieActivity : AppCompatActivity() {
                             .into(moviePoster)
                     }
                     movieTitle.text = movie.title
+                    PreferencesManager.prefer(movie.title)
                     movieReleaseDate.text = movie.releaseDate
                     movieOverview.text = movie.overview
                 } else {

@@ -1,6 +1,7 @@
 package com.example.bec_client
 
 import NotificationUpdateListener
+import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -60,6 +61,8 @@ class MainActivity : AppCompatActivity() {
     val CHANNEL_ID = "channelID"
     val CHANNEL_NAME = "channelName"
     private fun createNotifChannel() {
+
+        requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT).apply {
                 lightColor = Color.BLUE

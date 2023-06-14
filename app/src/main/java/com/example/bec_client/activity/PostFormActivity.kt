@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
+import com.example.bec_client.manager.PreferencesManager
 import com.example.restapi.home.data.model.request.EditPostModel
 import com.example.restapi.home.data.model.request.SubmitPostModel
 import com.example.restapi.home.data.model.response.SimpleResponseModel
@@ -64,7 +65,10 @@ class PostFormActivity : AppCompatActivity() {
 
         titleEditText.setText(title)
         contentEditText.setText(content)
-        if (movieName != null) movieNameTextView.text = movieName
+        if (movieName != null) {
+            PreferencesManager.prefer(movieName)
+            movieNameTextView.text = movieName
+        }
 
         // get user id from id token...
         val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
