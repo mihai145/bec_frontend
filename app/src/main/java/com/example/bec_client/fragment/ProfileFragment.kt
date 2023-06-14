@@ -1,5 +1,6 @@
 package com.example.bec_client.fragment
 
+import NotificationUpdateListener
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -53,7 +54,6 @@ class ProfileFragment : Fragment() {
             adapter = recyclerAdapter
         }
 
-
         return mView
     }
 
@@ -86,6 +86,7 @@ class ProfileFragment : Fragment() {
                     mainActivity.loginWithBrowser()
                 }
             }
+
         } else {
             profileInfo?.text = "Hello " + MainActivity.cachedUserProfile?.name
             button?.text = "LOGOUT"
@@ -94,6 +95,7 @@ class ProfileFragment : Fragment() {
                     mainActivity.logout()
                 }
             }
+
         }
     }
 

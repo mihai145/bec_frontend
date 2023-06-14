@@ -163,4 +163,16 @@ interface ApiInterface {
         @Header("Bearer") token: String,
         @Body postInfo: CommentLikedModel
     ): Call<SimpleResponseModel>
+
+    @POST("getNotification")
+    fun getNotificationForUser(
+        @Header("Bearer") token : String,
+        @Body userNot : UserNotificationModel
+    ): Call<NotificationResponseModel>
+
+    @POST("deleteNotification")
+    fun deleteNotification(
+        @Header("Bearer") token : String,
+        @Body notId : NotificationDelete
+    ): Call<SimpleResponseModel>
 }

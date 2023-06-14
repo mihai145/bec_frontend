@@ -22,6 +22,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     var leaderboardLiveData: LiveData<LeaderboardResponseModel>? = null
     var likes: LiveData<Int>? = null
     var wasLiked: LiveData<Int>? = null
+    var notificationUser: LiveData<NotificationResponseModel>? = null
 
     init {
         searchRepository = SearchRepository()
@@ -78,4 +79,15 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     fun getLikesPost(postId: Long) {
         likes = searchRepository?.getLikesPost(postId)
     }
+
+    fun getNotificationUser(userId: Long)
+    {
+        notificationUser = searchRepository?.getNotification(userId)
+    }
+
+    fun deleteNotification(notificationId: Int)
+    {
+        searchRepository?.deleteNotification(notificationId)
+    }
+
 }
