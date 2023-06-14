@@ -46,6 +46,7 @@
             app:layout_constraintTop_toBottomOf="@id/deleteUserButton"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="80dp"
+            android:layout_marginTop="10dp"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
