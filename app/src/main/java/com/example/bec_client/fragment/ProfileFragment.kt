@@ -103,45 +103,6 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupProfileFragment()
 
-        // this will have to change later... we will add the id token to all requests to the backend
-        val amIAuthenticatedButton: Button? =
-            getView()?.findViewById(R.id.amIAuthenticatedButton)
-        amIAuthenticatedButton?.setOnClickListener {
-            val executor = Executors.newSingleThreadExecutor()
-            executor.execute {
-                try {
-                    val myURL = URL("https://teambec.life/amILoggedIn")
-                    val myURLConnection: HttpURLConnection =
-                        myURL.openConnection() as HttpURLConnection
-
-                    var bearer = "null"
-                    if (MainActivity.cachedCredentials != null) {
-                        bearer = MainActivity.cachedCredentials?.idToken.toString()
-                    }
-
-                    Log.d("BEARER", bearer)
-                    myURLConnection.setRequestProperty("bearer", bearer)
-                    myURLConnection.requestMethod = "GET"
-                    myURLConnection.useCaches = false
-                    myURLConnection.doInput = true
-                    myURLConnection.doOutput = false
-
-                    val res = myURLConnection.inputStream.bufferedReader().readText()
-
-                    (activity as MainActivity).runOnUiThread {
-                        Toast.makeText(activity, res, Toast.LENGTH_SHORT).show()
-                    }
-                } catch (e: java.lang.Exception) {
-                    /// >=400 status codes are FileNotFound exceptions...
-                    (activity as MainActivity).runOnUiThread {
-                        Toast.makeText(activity, "Not authenticated", Toast.LENGTH_SHORT).show()
-                    }
-                    Log.d("DEBUG: ", e.toString())
-                }
-            }
-            executor.shutdown()
-            executor.awaitTermination(1, TimeUnit.SECONDS)
-        }
     }
 
     override fun onStart() {
