@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.SearchView
+import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +31,7 @@ class RecommendActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recommend)
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
+        val loadingText : TextView = findViewById(R.id.textLoading)
         searchViewModel = ViewModelProvider(this)[SearchViewModel::class.java]
         gptViewModel = ViewModelProvider(this)[GptViewModel::class.java]
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
@@ -42,6 +44,7 @@ class RecommendActivity : AppCompatActivity() {
         gptViewModel.preferencesLiveData?.observe(this, Observer {
             if (it != null) {
                 progressBar.visibility = View.GONE
+                loadingText.visibility = View.GONE
                 it.results.forEach{x -> loadMovie(x)}
                 Log.d("Debug", it.toString())
             } else {
