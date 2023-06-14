@@ -8,8 +8,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
+import com.example.bec_client.adapter.CommentAdapter
+import com.example.bec_client.adapter.PostAdapter
+import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.data.model.request.UserDeleteModel
 import com.example.restapi.home.data.model.request.UserFollowModel
 import com.example.restapi.home.data.model.response.SimpleResponseModel
@@ -24,6 +29,7 @@ class UserActivity : AppCompatActivity() {
     private var id: Long = 0
     private var nickname: String = ""
     private var following: Boolean = false
+    private lateinit var recyclerAdapter: PostAdapter
     private lateinit var searchViewModel: SearchViewModel
 //    private lateinit var user : UserModel
 
@@ -231,6 +237,34 @@ class UserActivity : AppCompatActivity() {
                     followButton.text = "FOLLOW"
                 }
                 Log.d("DEBUG:", "A crapat")
+            }
+        })
+
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(
+                rootView.context, LinearLayoutManager.VERTICAL, false
+            )
+            recyclerAdapter = PostAdapter()
+            adapter = recyclerAdapter
+        }
+
+        populate_user_posts()
+    }
+
+    fun populate_user_posts() {
+        // populate recycler
+        if (MainActivity.cachedCredentials != null) {
+            recyclerAdapter.resetAdapter()
+            searchViewModel.getUserPosts(id)
+        }
+
+        searchViewModel.userPostsLiveData?.observe(this, Observer {
+            if (it != null) {
+                recyclerAdapter.submitList(it.posts.map { x -> CardModel(x) })
+                Log.d("DebugPosts", it.toString())
+            } else {
+                Log.d("DEBUG POSTS:", "a crapat")
             }
         })
     }

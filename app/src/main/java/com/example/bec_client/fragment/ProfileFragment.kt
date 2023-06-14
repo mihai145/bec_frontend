@@ -1,5 +1,6 @@
 package com.example.bec_client.fragment
 
+import NotificationUpdateListener
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -53,12 +54,12 @@ class ProfileFragment : Fragment() {
             adapter = recyclerAdapter
         }
 
-
         return mView
     }
 
     fun feedData() {
         // populate recycler
+        Log.d("FeedData", "FeedData")
         recyclerAdapter.resetAdapter()
         searchViewModel.getLeaderboard()
         searchViewModel.leaderboardLiveData?.observe(viewLifecycleOwner, Observer {
@@ -85,6 +86,7 @@ class ProfileFragment : Fragment() {
                     mainActivity.loginWithBrowser()
                 }
             }
+
         } else {
             profileInfo?.text = "Hello " + MainActivity.cachedUserProfile?.name
             button?.text = "LOGOUT"
@@ -93,6 +95,7 @@ class ProfileFragment : Fragment() {
                     mainActivity.logout()
                 }
             }
+
         }
     }
 
@@ -107,7 +110,7 @@ class ProfileFragment : Fragment() {
             val executor = Executors.newSingleThreadExecutor()
             executor.execute {
                 try {
-                    val myURL = URL("https://teambec.live/amILoggedIn")
+                    val myURL = URL("https://teambec.life/amILoggedIn")
                     val myURLConnection: HttpURLConnection =
                         myURL.openConnection() as HttpURLConnection
 

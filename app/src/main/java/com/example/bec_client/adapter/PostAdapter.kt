@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
 import com.example.bec_client.activity.*
+import com.example.bec_client.manager.PreferencesManager
 import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.data.model.request.PostInfoModel
 import com.example.restapi.home.data.model.request.PostLikedModel

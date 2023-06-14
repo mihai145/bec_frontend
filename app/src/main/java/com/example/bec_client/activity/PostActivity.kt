@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.bec_client.MainActivity
 import com.example.bec_client.R
 import com.example.bec_client.adapter.CommentAdapter
+import com.example.bec_client.manager.PreferencesManager
 import com.example.restapi.home.data.model.CardModel
 import com.example.restapi.home.data.model.PostModel
 import com.example.restapi.home.data.model.request.PostInfoModel
@@ -75,6 +76,7 @@ class PostActivity : AppCompatActivity() {
                         if (post.movieName != null) {
                             val mvName = post.movieName
                             movieName.text = "Movie: $mvName"
+                            PreferencesManager.prefer(mvName)
                         } else {
                             movieName.text = "no movie"
                         }
@@ -274,6 +276,7 @@ class PostActivity : AppCompatActivity() {
                     if (post.movieName != null) {
                         val mvName = post.movieName
                         movieName.text = "Movie: $mvName"
+                        PreferencesManager.prefer(mvName)
                     } else {
                         movieName.text = "no movie"
                     }
