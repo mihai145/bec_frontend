@@ -43,5 +43,4 @@ class GptRepository {
             })
         return data
     }
-
 }
