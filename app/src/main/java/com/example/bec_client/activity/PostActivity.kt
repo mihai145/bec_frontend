@@ -73,6 +73,7 @@ class PostActivity : AppCompatActivity() {
                         postTitle.text = "Title: $title"
                         authorName.text = "Author: $author"
                         postContent.text = post.content
+                        numberOfComments.text = "Number of comments: ${post.nrComments}"
                         if (post.movieName != null) {
                             val mvName = post.movieName
                             movieName.text = "Movie: $mvName"
@@ -105,6 +106,8 @@ class PostActivity : AppCompatActivity() {
         movieName = findViewById(R.id.movieName)
         postContent = findViewById(R.id.postContent)
         likesCount = findViewById(R.id.likesCount)
+
+        numberOfComments = findViewById(R.id.nrComments)
 
         editButton = findViewById(R.id.editPost)
         addComment = findViewById(R.id.addComment)
@@ -144,6 +147,8 @@ class PostActivity : AppCompatActivity() {
                 intent.putExtra("content", "Content")
                 intent.putExtra("postId", post.id)
                 intent.putExtra("userId", MainActivity.userId)
+                post.nrComments++
+                numberOfComments.text = "Number of comments: ${post.nrComments}"
                 startActivity(intent)
             }
         }
@@ -273,6 +278,7 @@ class PostActivity : AppCompatActivity() {
                     postTitle.text = "Title: $title"
                     authorName.text = "Author: $author"
                     postContent.text = post.content
+                    numberOfComments.text = "Number of comments: ${post.nrComments}"
                     if (post.movieName != null) {
                         val mvName = post.movieName
                         movieName.text = "Movie: $mvName"
