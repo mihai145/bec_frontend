@@ -40,6 +40,7 @@ class PostActivity : AppCompatActivity() {
     private lateinit var movieName: TextView
     private lateinit var postContent: TextView
     private lateinit var likesCount: TextView
+    private lateinit var numberOfComments: TextView
 
     private lateinit var editButton: Button
     private lateinit var addComment: Button
@@ -147,7 +148,6 @@ class PostActivity : AppCompatActivity() {
                 intent.putExtra("content", "Content")
                 intent.putExtra("postId", post.id)
                 intent.putExtra("userId", MainActivity.userId)
-                post.nrComments++
                 numberOfComments.text = "Number of comments: ${post.nrComments}"
                 startActivity(intent)
             }
