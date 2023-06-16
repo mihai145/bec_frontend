@@ -21,7 +21,7 @@ class CardModel {
     constructor(actor: ActorModel) {
         imagePath = actor.profilePath
         title = actor.name
-        body = "Actor known for " + actor.knownForDepartment
+        body = "Known for " + actor.knownForDepartment
         id = actor.id
         type = 2
     }

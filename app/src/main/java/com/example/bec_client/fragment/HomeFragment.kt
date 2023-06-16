@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -33,6 +34,7 @@ class HomeFragment : Fragment() {
     private lateinit var searchViewModel: SearchViewModel
     private lateinit var recyclerAdapter: PostAdapter
     private lateinit var swipeContainer: SwipeRefreshLayout
+    private lateinit var textLogin: TextView
     ////
     private lateinit var reviewButton: Button
     private lateinit var recommendButton: Button
@@ -65,6 +67,7 @@ class HomeFragment : Fragment() {
         }
         /////
         //val userId = if (MainActivity.userId == null) (-1) else MainActivity.userId!!
+        textLogin = mView.findViewById(R.id.textLogin)
         reviewButton = mView.findViewById(R.id.reviewButton)
         reviewButton.setOnClickListener {
             if (reviewButton.text != "LOADING") {
@@ -112,6 +115,11 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        if (MainActivity.cachedCredentials != null) {
+            textLogin.visibility = View.GONE
+        } else {
+            textLogin.visibility = View.VISIBLE
+        }
         feedData()
         Log.d("DEBUG", "onResume called inside HomeFragment")
         recyclerAdapter.notifyDataSetChanged();

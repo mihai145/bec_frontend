@@ -2,6 +2,7 @@ package com.example.bec_client.activity
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -162,6 +163,10 @@ class UserActivity : AppCompatActivity() {
         }
 
         deleteButton = findViewById(R.id.deleteUserButton)
+        if (!MainActivity.isAdmin) {
+            deleteButton.visibility = View.INVISIBLE
+        }
+
         deleteButton.setOnClickListener {
             if (MainActivity.cachedCredentials == null) {
                 Toast.makeText(this, "You need to be logged in to do that", Toast.LENGTH_SHORT)
